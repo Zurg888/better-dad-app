@@ -102,7 +102,6 @@
           <div class="metric"><div class="name">Mood</div><div class="num"><span id="mood">—</span>/10</div></div>
         </div>
         <div class="actions"><button class="primary" onclick="showTab('checkin')">Log Today</button><button class="secondary" onclick="showTab('craving')">Help</button></div>
-        <button class="danger" onclick="resetDeviceData()" style="margin-top:12px">Reset This Device</button>
       </section>
 
       <section id="checkin" class="section">
@@ -162,6 +161,7 @@
           <div class="field hidden" id="weeklyDrinkLimitField"><label>Drinks allowed per week</label><input id="weeklyDrinkLimitIn" type="number" inputmode="tel" pattern="[0-9]*" min="0" step="1" placeholder="7"></div>
           <p class="settingsNote">Your rules save on this device only. Choose zero drinks or a weekly drink limit. Knights rank up while staying inside their rule.</p>
           <div class="miniRow"><button class="primary" type="submit">Save Rules</button><button class="secondary" type="button" onclick="resetRules()">Reset</button></div>
+          <button class="danger" type="button" onclick="resetDeviceData()">Reset This Device</button>
         </form>
       </section>
     </main>
