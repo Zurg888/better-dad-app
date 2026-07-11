@@ -1,4 +1,4 @@
-const CACHE = 'galahad-v5';
+const CACHE = 'galahad-v6';
 const ASSETS = [
   './manifest.webmanifest',
   './icon.svg',
@@ -10,6 +10,12 @@ const ASSETS = [
   './assets/level-03.gif',
   './assets/level-04.gif',
   './assets/level-05.gif',
+  './assets/warrior-base.svg',
+  './assets/warrior-leather.svg',
+  './assets/warrior-chain.svg',
+  './assets/warrior-shield.svg',
+  './assets/warrior-plate.svg',
+  './assets/warrior-legend.svg',
   './assets/background-music.mp3'
 ];
 self.addEventListener('install', event => {
