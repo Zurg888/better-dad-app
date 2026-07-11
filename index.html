@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f13a16" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="185 Mission" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" />
+  <title>Better Dad — 185 Mission</title>
+  <style>
+    :root{
+      --red:#f13a16;
+      --red2:#b61c12;
+      --orange:#ff8b16;
+      --yellow:#ffd23f;
+      --cream:#fff0c2;
+      --black:#080706;
+      --ink:#14100b;
+      --panel:#1a120b;
+      --steel:#c7c3b6;
+      --muted:#d8ba72;
+      --green:#8dff4a;
+      --danger:#ff4c2f;
+      --line:#0b0704;
+      --shadow:8px 8px 0 #050302;
+      --font-head:Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      --font-body:"Arial Narrow", Arial, Helvetica, sans-serif;
+      --font-mono:"Courier New", ui-monospace, monospace;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--red);color:var(--cream);font-family:var(--font-body)}
+    body{min-height:100svh;background:
+      linear-gradient(135deg,rgba(0,0,0,.12) 25%,transparent 25%) 0 0/10px 10px,
+      radial-gradient(circle at 15% 5%, rgba(255,210,63,.24), transparent 25%),
+      linear-gradient(180deg,#ff351f 0%,#dd2814 48%,#a9150d 100%);}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;mix-blend-mode:multiply;background-image:repeating-radial-gradient(circle at 20% 30%, #000 0 1px, transparent 1px 5px)}
+    button,input,select{font:inherit}button{cursor:pointer}
+    .app{max-width:480px;margin:0 auto;min-height:100svh;padding:12px 12px 34px;position:relative}
+    .masthead{background:var(--black);border:4px solid var(--black);box-shadow:var(--shadow);padding:8px 10px 11px;margin-bottom:12px;transform:skew(-3deg)}
+    .masthead h1{font-family:var(--font-head);font-size:47px;line-height:.88;margin:0;color:var(--orange);letter-spacing:.02em;text-shadow:3px 3px 0 #000,-1px -1px 0 var(--yellow);transform:skew(3deg);text-transform:uppercase}
+    .masthead .sub{font-family:var(--font-mono);font-size:12px;color:var(--yellow);letter-spacing:1px;margin-top:5px;transform:skew(3deg);font-weight:900}
+    .topRow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.date{background:var(--cream);color:var(--ink);border:3px solid var(--black);box-shadow:4px 4px 0 #000;padding:8px 10px;font-family:var(--font-mono);font-size:12px;font-weight:900}.missionTag{background:var(--yellow);color:var(--ink);border:3px solid #000;box-shadow:4px 4px 0 #000;padding:8px 10px;font-family:var(--font-head);font-size:20px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+    .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}.tab{min-height:46px;background:#22160d;color:var(--cream);border:3px solid var(--black);box-shadow:3px 3px 0 #000;font-family:var(--font-head);font-size:17px;text-transform:uppercase;letter-spacing:.02em}.tab.active{background:var(--yellow);color:var(--ink)}
+    .section{display:none}.section.active{display:block;animation:pop .15s ease}@keyframes pop{from{opacity:.65;transform:translateY(3px)}to{opacity:1;transform:none}}
+    .panel{background:var(--panel);border:4px solid #000;box-shadow:var(--shadow);padding:12px;margin-bottom:12px;position:relative}.panel:before{content:"";position:absolute;inset:4px;border:1px solid rgba(255,210,63,.18);pointer-events:none}.panel.orange{background:linear-gradient(180deg,#ff9d19,#df5d12);color:var(--ink)}.panel.cream{background:var(--cream);color:var(--ink)}
+    .sectionTitle{display:inline-block;background:var(--yellow);color:#111;border:3px solid #000;box-shadow:4px 4px 0 #000;font-family:var(--font-head);font-size:24px;text-transform:uppercase;letter-spacing:.02em;padding:4px 9px;margin:0 0 10px;transform:skew(-5deg)}.sectionTitle span{display:block;transform:skew(5deg)}
+    .verse{font-family:Georgia,serif;font-weight:800;font-size:24px;line-height:1.16;margin:2px 0 8px;color:#140b06}.ref{font-family:var(--font-head);font-size:20px;text-transform:uppercase;margin:0;color:#3b1908}.focus{font-size:16px;line-height:1.25;font-weight:900;margin:12px 0 0;background:rgba(0,0,0,.12);border:2px solid #000;padding:9px}
+    .hud{display:grid;grid-template-columns:1fr 118px;gap:10px;align-items:stretch}.portrait{background:#0b0907;border:3px solid #000;min-height:128px;display:grid;place-items:center;position:relative;overflow:hidden}.portrait:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 48%,rgba(255,255,255,.06) 50%,transparent 52%) 0 0/100% 6px}.face{font-size:56px;filter:grayscale(.5) contrast(1.4)}.rank{background:#17100a;border:3px solid #000;text-align:center;padding:10px;display:grid;place-items:center}.rank b{font-family:var(--font-head);font-size:40px;color:var(--green);text-shadow:2px 2px 0 #000;line-height:.9}.rank span{font-family:var(--font-mono);font-size:11px;color:var(--muted);font-weight:900;text-transform:uppercase}
+    .progressBox{margin-top:10px}.barLabel{display:flex;justify-content:space-between;gap:10px;font-family:var(--font-head);font-size:20px;color:var(--yellow);text-transform:uppercase;margin-bottom:5px}.track{height:24px;background:#070504;border:3px solid #000;padding:3px}.fill{height:100%;width:0%;background:repeating-linear-gradient(90deg,var(--green) 0 12px,#6ecb35 12px 16px);box-shadow:0 0 12px rgba(141,255,74,.5);transition:width .3s ease}
+    .statusStrip{background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px;margin-bottom:12px;display:flex;justify-content:space-between;gap:12px;align-items:center}.statusStrip b{font-family:var(--font-head);font-size:24px;color:var(--yellow);text-transform:uppercase}.statusStrip span{font-weight:900;color:var(--cream);font-size:16px;text-align:right}.statusStrip.missing{background:#3a100b}.statusStrip.missing b{color:#ffb23d}
+    .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.metric{background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px;min-height:94px}.metric .name{font-family:var(--font-head);font-size:18px;text-transform:uppercase;color:var(--muted);line-height:.95}.metric .num{font-family:var(--font-head);font-size:36px;line-height:.9;color:var(--cream);text-shadow:2px 2px 0 #000;margin-top:16px}.metric.good .num{color:var(--green)}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.btn,.primary,.secondary,.danger{min-height:52px;border:3px solid #000;box-shadow:4px 4px 0 #000;font-family:var(--font-head);font-size:22px;text-transform:uppercase;letter-spacing:.02em}.primary{background:var(--yellow);color:var(--ink);width:100%}.secondary{background:#2a1b10;color:var(--cream);width:100%}.danger{background:var(--danger);color:#fff;width:100%}.btn:active,.primary:active,.secondary:active,.danger:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #000}
+    form{display:grid;gap:10px}.field{background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px}.field label{display:block;font-family:var(--font-head);font-size:20px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px}.field input,.field select{width:100%;min-height:48px;background:#fff5cf;color:#111;border:3px solid #000;padding:10px;font-size:20px;font-weight:900}
+    .bodyText{font-size:18px;line-height:1.28;font-weight:850;margin:0}.list{display:grid;gap:10px}.historyItem{background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px}.historyItem b{font-family:var(--font-head);font-size:21px;color:var(--yellow);text-transform:uppercase}.historyItem p{margin:4px 0 0;color:var(--cream);font-weight:800}.check{color:var(--green);font-family:var(--font-head);font-size:22px}.x{color:var(--danger);font-family:var(--font-head);font-size:22px}.timer{font-family:var(--font-head);font-size:68px;text-align:center;color:var(--green);text-shadow:3px 3px 0 #000;margin:8px 0}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(18px);opacity:0;background:var(--yellow);color:#111;border:3px solid #000;box-shadow:5px 5px 0 #000;padding:10px 14px;font-family:var(--font-head);font-size:20px;text-transform:uppercase;z-index:20;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:390px){.app{padding:10px 9px 30px}.masthead h1{font-size:39px}.tab{font-size:15px}.hud{grid-template-columns:1fr 96px}.metrics{grid-template-columns:1fr 1fr}.metric .num{font-size:31px}.verse{font-size:21px}.actions{grid-template-columns:1fr}.missionTag{font-size:17px}.sectionTitle{font-size:22px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="masthead"><h1>Better Dad</h1><div class="sub">REAL LIFE MODE // 185 MISSION</div></header>
+    <div class="topRow"><div class="date" id="todayDate">Today</div><div class="missionTag">Level 01</div></div>
+    <nav class="tabs" aria-label="Sections">
+      <button class="tab active" data-tab="home" onclick="showTab('home')">Today</button>
+      <button class="tab" data-tab="checkin" onclick="showTab('checkin')">Log</button>
+      <button class="tab" data-tab="progress" onclick="showTab('progress')">Stats</button>
+      <button class="tab" data-tab="plan" onclick="showTab('plan')">Plan</button>
+    </nav>
+
+    <main>
+      <section id="home" class="section active">
+        <article class="panel cream">
+          <h2 class="sectionTitle"><span>Daily Verse</span></h2>
+          <p class="verse" id="verseText">“The Lord is my strength and my shield; in him my heart trusts.”</p>
+          <p class="ref" id="verseRef">Psalm 28:7</p>
+          <p class="focus" id="reflection">Today’s focus: choose presence over escape.</p>
+        </article>
+
+        <div class="statusStrip" id="checkinStrip"><b id="checkinStatus">Not Logged</b><span id="lastCheckin">No check-in today</span></div>
+
+        <div class="panel">
+          <div class="hud">
+            <div class="portrait"><div class="face">🛡️</div></div>
+            <div class="rank"><span>Player Status</span><b id="status">NEW</b></div>
+          </div>
+          <div class="progressBox">
+            <div class="barLabel"><span>Weight Quest</span><span><span id="curW">210</span> → 185</span></div>
+            <div class="track"><div class="fill" id="weightFill"></div></div>
+            <div class="barLabel"><span>Lost</span><span><span id="lost">0</span> LB</span></div>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric good"><div class="name">Sober Streak</div><div class="num"><span id="streak">0</span>D</div></div>
+          <div class="metric"><div class="name">Miles Week</div><div class="num"><span id="miles">0</span></div></div>
+          <div class="metric good"><div class="name">Protein</div><div class="num"><span id="protein">0</span>G</div></div>
+          <div class="metric"><div class="name">Mood</div><div class="num"><span id="mood">—</span>/10</div></div>
+        </div>
+        <div class="actions"><button class="primary" onclick="showTab('checkin')">Log Today</button><button class="secondary" onclick="showTab('craving')">Reset</button></div>
+      </section>
+
+      <section id="checkin" class="section">
+        <div class="panel orange"><h2 class="sectionTitle"><span>Mission Log</span></h2><p class="bodyText">Quick entry. Honest stats. No overthinking.</p></div>
+        <form id="form">
+          <div class="field"><label>Today's weight</label><input id="weight" type="number" step="0.1" placeholder="210.0"></div>
+          <div class="field"><label>Sober today?</label><select id="sober"><option value="yes">Yes — no alcohol</option><option value="no">No — log it honestly</option></select></div>
+          <div class="field"><label>Drinks</label><input id="drinks" type="number" min="0" value="0"></div>
+          <div class="field"><label>Protein grams</label><input id="proteinIn" type="number" min="0" placeholder="180"></div>
+          <div class="field"><label>Miles run/walked</label><input id="milesIn" type="number" min="0" step="0.1" placeholder="1"></div>
+          <div class="field"><label>Workout</label><select id="workout"><option>Rest / walk</option><option>Lift A</option><option>Lift B</option><option>Run</option></select></div>
+          <div class="field"><label>Mood 1-10</label><input id="moodIn" type="number" min="1" max="10" placeholder="5"></div>
+          <button class="primary" type="submit">Save Log</button>
+        </form>
+      </section>
+
+      <section id="progress" class="section">
+        <div class="panel"><h2 class="sectionTitle"><span>Quest Board</span></h2><p class="bodyText">Target: 185. Muscular 190 still counts as a win. Sober, strong, present.</p></div>
+        <div class="list" id="history"></div>
+      </section>
+
+      <section id="plan" class="section">
+        <div class="panel cream"><h2 class="sectionTitle"><span>Rule 01</span></h2><p class="bodyText">No White Claws in the house. Don’t fight the boss at midnight with loot sitting in the fridge.</p></div>
+        <div class="panel"><h2 class="sectionTitle"><span>Lift A</span></h2><p class="bodyText">Squat 3x5–8 · Bench 3x5–8 · Cable row 3x10 · KB swings 4x15 · Plank 3 rounds</p></div>
+        <div class="panel"><h2 class="sectionTitle"><span>Lift B</span></h2><p class="bodyText">RDL/deadlift 3x5–8 · Pull-ups 4 sets · Press 3x6–10 · Arms 3x12 · Farmer carries</p></div>
+        <div class="panel"><h2 class="sectionTitle"><span>Food</span></h2><p class="bodyText">Meat first. 180–210g protein. Pizza only planned, not emotional.</p></div>
+      </section>
+
+      <section id="craving" class="section">
+        <div class="panel">
+          <h2 class="sectionTitle"><span>Boss Fight</span></h2>
+          <p class="bodyText">You do not need to solve your whole life tonight. You only need to stay sober right now.</p>
+          <div class="panel cream" style="box-shadow:4px 4px 0 #000;margin-top:12px"><p class="bodyText">“Come to me, all who labor and are heavy laden, and I will give you rest.” — Matthew 11:28</p></div>
+          <div class="timer" id="timer">10:00</div>
+          <button class="danger" onclick="startTimer()">Start Reset</button>
+          <button class="secondary" onclick="showTab('checkin')" style="margin-top:10px">Log Honestly</button>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast">Saved.</div>
+
+<script>
+const START=210, TARGET=185, KEY='betterDadLogs';
+const verses=[
+  {t:'“The Lord is my strength and my shield; in him my heart trusts.”', r:'Psalm 28:7', f:'Objective: choose presence over escape.'},
+  {t:'“I can do all things through him who strengthens me.”', r:'Philippians 4:13', f:'Objective: one sober decision at a time.'},
+  {t:'“Cast all your anxiety on him because he cares for you.”', r:'1 Peter 5:7', f:'Objective: hand stress to God before it becomes a craving.'},
+  {t:'“Be strong and courageous. Do not be frightened, and do not be dismayed.”', r:'Joshua 1:9', f:'Objective: courage looks like keeping one promise.'},
+  {t:'“Create in me a clean heart, O God, and renew a right spirit within me.”', r:'Psalm 51:10', f:'Objective: start clean, even if yesterday was messy.'},
+  {t:'“Come to me, all who labor and are heavy laden, and I will give you rest.”', r:'Matthew 11:28', f:'Objective: rest without numbing.'},
+  {t:'“Let us not grow weary of doing good, for in due season we will reap.”', r:'Galatians 6:9', f:'Objective: consistency compounds.'}
+];
+const $=id=>document.getElementById(id);
+function logs(){return JSON.parse(localStorage.getItem(KEY)||'[]')}
+function saveLogs(v){localStorage.setItem(KEY,JSON.stringify(v))}
+function today(){const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function addDays(key,n){const [y,m,d]=key.split('-').map(Number); const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()+n); return dateKey(dt)}
+function daysBetween(a,b){const [ay,am,ad]=a.split('-').map(Number), [by,bm,bd]=b.split('-').map(Number); return Math.round((new Date(by,bm-1,bd)-new Date(ay,am-1,ad))/86400000)}
+function showToast(t='Saved.'){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
+function showTab(id){document.querySelectorAll('.section,.tab').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll(`[data-tab="${id}"]`).forEach(x=>x.classList.add('active'));window.scrollTo({top:0,behavior:'smooth'});}
+function soberStreak(v){let s=0; const byDate=Object.fromEntries(v.map(l=>[l.date,l])); let cursor=today(); while(byDate[cursor] && byDate[cursor].sober==='yes' && Number(byDate[cursor].drinks||0)===0){s++; cursor=addDays(cursor,-1)} return s;}
+function checkinInfo(v){const t=today(); const sorted=[...v].sort((a,b)=>b.date.localeCompare(a.date)); const latest=sorted[0]; const todayLog=v.find(l=>l.date===t); if(todayLog) return {logged:true, label:'Logged Today', detail: todayLog.sober==='yes' && Number(todayLog.drinks||0)===0 ? 'Sober clear logged' : 'Honest log saved'}; if(!latest) return {logged:false, label:'Not Logged', detail:'No check-in today'}; const gap=daysBetween(latest.date,t); return {logged:false, label:'Missed Log', detail: gap===1 ? 'Last log was yesterday' : `Last log ${gap} days ago`};}
+function setVerse(){const d=new Date(); const start=new Date(d.getFullYear(),0,0); const day=Math.floor((d-start)/86400000); const v=verses[day%verses.length]; $('verseText').textContent=v.t; $('verseRef').textContent=v.r; $('reflection').textContent=v.f; $('todayDate').textContent=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}).toUpperCase();}
+function render(){
+  const v=logs();
+  const sorted=[...v].sort((a,b)=>a.date.localeCompare(b.date));
+  const latest=sorted[sorted.length-1]||{};
+  const info=checkinInfo(v);
+  $('checkinStatus').textContent=info.label;
+  $('lastCheckin').textContent=info.detail;
+  $('checkinStrip').classList.toggle('missing', !info.logged);
+  const current=Number(latest.weight||START);
+  const lost=Math.max(0, START-current);
+  const pct=Math.max(0,Math.min(100,(lost/(START-TARGET))*100));
+  $('lost').textContent=lost.toFixed(1).replace('.0','');
+  $('curW').textContent=current.toFixed(1).replace('.0','');
+  $('weightFill').style.width=pct+'%';
+  const st=soberStreak(v);
+  $('streak').textContent=st;
+  $('status').textContent=info.logged ? (st>=14?'ELITE':st>=7?'LOCKED':st>=3?'LIVE':'NEW') : 'MISS';
+  $('protein').textContent=info.logged ? (latest.protein||0) : 0;
+  $('mood').textContent=info.logged ? (latest.mood||'—') : '—';
+  const weekAgo=Date.now()-6*864e5;
+  const miles=v.filter(l=>new Date(l.date+'T00:00:00').getTime()>=weekAgo).reduce((a,l)=>a+Number(l.miles||0),0);
+  $('miles').textContent=miles.toFixed(1).replace('.0','');
+  $('history').innerHTML=v.slice(-10).reverse().map(l=>`<div class="historyItem"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${l.date}</b><p>${l.weight||'—'} lb · ${l.protein||0}g protein · ${l.miles||0} mi · mood ${l.mood||'—'}/10</p></div><div class="${l.sober==='yes'?'check':'x'}">${l.sober==='yes'?'CLEAR':'LOGGED'}</div></div></div>`).join('')||'<div class="historyItem"><b>No logs yet</b><p>Log today to start the run.</p></div>';
+}
+$('form').addEventListener('submit',e=>{e.preventDefault(); const entry={date:today(),weight:$('weight').value||START,sober:$('sober').value,drinks:$('drinks').value||0,protein:$('proteinIn').value||0,miles:$('milesIn').value||0,workout:$('workout').value,mood:$('moodIn').value||''}; let v=logs().filter(l=>l.date!==entry.date); v.push(entry); saveLogs(v); render(); showToast('Log saved'); showTab('home')});
+let int=null, left=600; function startTimer(){clearInterval(int); left=600; $('timer').textContent='10:00'; int=setInterval(()=>{left--; const m=String(Math.floor(left/60)).padStart(2,'0'), s=String(left%60).padStart(2,'0'); $('timer').textContent=`${m}:${s}`; if(left<=0){clearInterval(int); showToast('Reset complete')}},1000)}
+setVerse(); render();
+if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+</script>
+</body>
+</html>
