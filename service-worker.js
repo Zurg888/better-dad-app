@@ -1,4 +1,4 @@
-const CACHE = 'galahad-v4';
+const CACHE = 'galahad-v5';
 const ASSETS = [
   './manifest.webmanifest',
   './icon.svg',
@@ -9,7 +9,8 @@ const ASSETS = [
   './assets/level-02.gif',
   './assets/level-03.gif',
   './assets/level-04.gif',
-  './assets/level-05.gif'
+  './assets/level-05.gif',
+  './assets/background-music.mp3'
 ];
 self.addEventListener('install', event => {
   self.skipWaiting();
