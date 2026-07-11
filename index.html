@@ -101,7 +101,7 @@
           <div class="metric good"><div class="name">Protein</div><div class="num"><span id="protein">0/185G</span></div></div>
           <div class="metric"><div class="name">Mood</div><div class="num"><span id="mood">—</span>/10</div></div>
         </div>
-        <div class="actions"><button class="primary" onclick="showTab('checkin')">Log Today</button><button class="secondary" onclick="showTab('craving')">Reset</button></div>
+        <div class="actions"><button class="primary" onclick="showTab('checkin')">Log Today</button><button class="secondary" onclick="showTab('craving')">Help</button></div>
       </section>
 
       <section id="checkin" class="section">
@@ -142,12 +142,12 @@
 
       <section id="craving" class="section">
         <div class="panel">
-          <h2 class="sectionTitle"><span>Boss Fight</span></h2>
-          <p class="bodyText">You do not need to solve your whole life tonight. You only need to stay sober right now.</p>
+          <h2 class="sectionTitle"><span>Help Screen</span></h2>
+          <p class="bodyText">This page is for a hard moment — not a penalty, not a reset button, and not a failure screen.</p>
           <div class="panel cream" style="box-shadow:4px 4px 0 #000;margin-top:12px"><p class="bodyText">“Come to me, all who labor and are heavy laden, and I will give you rest.” — Matthew 11:28</p></div>
-          <div class="timer" id="timer">10:00</div>
-          <button class="danger" onclick="startTimer()">Start Reset</button>
-          <button class="secondary" onclick="showTab('checkin')" style="margin-top:10px">Log Honestly</button>
+          <div class="panel" style="box-shadow:4px 4px 0 #000;margin-top:12px"><p class="bodyText">One move: drink water, breathe, step away from the trigger, then log honestly if you need to.</p></div>
+          <button class="primary" onclick="showTab('home')">Back to Today</button>
+          <button class="secondary" onclick="showTab('checkin')" style="margin-top:10px">Open Log</button>
         </div>
       </section>
 
@@ -313,7 +313,6 @@ function loadRulesForm(){const r=rules(); $('startTargetIn').value=r.start; $('w
 $('rulesForm').addEventListener('submit',e=>{e.preventDefault(); const mode=$('alcoholModeIn').value; const next={start:Number($('startTargetIn').value)||DEFAULT_RULES.start,target:Number($('weightTargetIn').value)||DEFAULT_RULES.target,protein:Number($('proteinTargetIn').value)||DEFAULT_RULES.protein,alcoholMode:mode,weeklyDrinkLimit:mode==='limit'?Math.max(0,Number($('weeklyDrinkLimitIn').value)||0):0}; saveRules(next); render(); loadRulesForm(); showToast('Rules saved'); showTab('home')});
 function resetRules(){saveRules(DEFAULT_RULES); loadRulesForm(); render(); showToast('Rules reset')}
 function quickAddWater(){playWaterSound(); let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Chalice +1')};
-let int=null, left=600; function startTimer(){clearInterval(int); left=600; $('timer').textContent='10:00'; int=setInterval(()=>{left--; const m=String(Math.floor(left/60)).padStart(2,'0'), s=String(left%60).padStart(2,'0'); $('timer').textContent=`${m}:${s}`; if(left<=0){clearInterval(int); showToast('Reset complete')}},1000)}
 migrateStorage(); setVerse(); updateDrinksField(); loadRulesForm(); setMusicVolume(); render();
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./service-worker.js').then(r=>r.update()).catch(()=>{});
 </script>
