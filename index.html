@@ -107,11 +107,11 @@
       <section id="checkin" class="section">
         <div class="panel orange"><h2 class="sectionTitle"><span>Mission Log</span></h2><p class="bodyText">Quick entry. Honest stats. No overthinking.</p></div>
         <form id="form">
-          <div class="field"><label>Today's weight</label><input id="weight" type="number" inputmode="decimal" step="0.1" placeholder="210.0"></div>
+          <div class="field"><label id="weightLogLabel">Today's weight</label><input id="weight" type="number" inputmode="decimal" step="0.1" placeholder="210.0"></div>
           <div class="field"><label>Sober today?</label><select id="sober"><option value="yes">Yes — no alcohol</option><option value="no">No — log it honestly</option></select></div>
           <div class="field hidden" id="drinksField"><label>Drinks</label><input id="drinks" type="number" inputmode="tel" pattern="[0-9]*" min="0" value="0"></div>
           <div class="field"><label>Water chalices</label><input id="waterIn" type="number" inputmode="tel" pattern="[0-9]*" min="0" max="12" step="1" placeholder="6"></div>
-          <div class="field"><label>Protein grams</label><input id="proteinIn" type="number" inputmode="tel" pattern="[0-9]*" min="0" placeholder="180"></div>
+          <div class="field"><label id="proteinLogLabel">Protein grams</label><input id="proteinIn" type="number" inputmode="tel" pattern="[0-9]*" min="0" placeholder="185"></div>
           <div class="field"><label>Travel miles</label><input id="milesIn" type="number" inputmode="decimal" min="0" step="0.1" placeholder="1"></div>
           <div class="field"><label>Workout</label><select id="workout"><option>Rest / walk</option><option>Lift A</option><option>Lift B</option><option>Run</option></select></div>
           <div class="field"><label>Mood 1-10</label><input id="moodIn" type="number" inputmode="tel" pattern="[0-9]*" min="1" max="10" placeholder="5"></div>
@@ -128,7 +128,7 @@
         <div class="panel cream"><h2 class="sectionTitle"><span>Rule 01</span></h2><p class="bodyText">Don’t fight the boss at midnight with loot sitting in the fridge.</p></div>
         <div class="panel"><h2 class="sectionTitle"><span>Lift A</span></h2><p class="bodyText">Squat 3x5–8 · Bench 3x5–8 · Cable row 3x10 · KB swings 4x15 · Plank 3 rounds</p></div>
         <div class="panel"><h2 class="sectionTitle"><span>Lift B</span></h2><p class="bodyText">RDL/deadlift 3x5–8 · Pull-ups 4 sets · Press 3x6–10 · Arms 3x12 · Suitcase holds</p></div>
-        <div class="panel"><h2 class="sectionTitle"><span>Food</span></h2><p class="bodyText">Meat first. 180–210g protein. Cheat days planned, not emotional.</p></div>
+        <div class="panel"><h2 class="sectionTitle"><span>Food</span></h2><p class="bodyText" id="foodPlanText">Meat first. 185g protein. Cheat days planned, not emotional.</p></div>
       </section>
 
 
@@ -268,6 +268,10 @@ function render(){
   $('curW').textContent=fmt(current);
   $('targetW').textContent=fmt(r.target);
   $('weightFill').style.width=pct+'%';
+  $('weightLogLabel').textContent=`Today's weight (${fmt(r.start)} → ${fmt(r.target)} lb)`;
+  $('weight').placeholder=fmt(r.start);
+  $('proteinLogLabel').textContent=`Protein grams (target ${r.protein}g)`;
+  $('proteinIn').placeholder=String(r.protein);
   const st=soberStreak(v);
   $('streak').textContent=st;
   
@@ -287,6 +291,7 @@ function render(){
   const miles=v.filter(l=>new Date(l.date+'T00:00:00').getTime()>=weekAgo).reduce((a,l)=>a+Number(l.miles||0),0);
   $('miles').textContent=miles.toFixed(1).replace('.0','')+' MI';
   $('questSummary').textContent=`Target: ${fmt(r.target)} lb · Protein: ${r.protein}g/day · Alcohol: ${alcoholRuleText(r)}. Current rank: ${KNIGHT_RANKS[level-1].name}.`;
+  $('foodPlanText').textContent=`Meat first. Aim for ${r.protein}g protein. Cheat days planned, not emotional.`;
   renderRankBoard(st,level);
   $('history').innerHTML=fullLogs(v).slice(-10).reverse().map(l=>{const clear=questClear(l,v,r); return `<div class="historyItem"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${l.date}</b><p>${l.weight||'—'} lb · ${l.protein||0}g protein · ${l.water||0}/${WATER_TARGET} chalices · ${l.miles||0} road mi · ${l.drinks||0} drinks · mood ${l.mood||'—'}/10</p></div><div class="${clear?'check':'x'}">${clear?'CLEAR':'RESET'}</div></div></div>`}).join('')||'<div class="historyItem"><b>No logs yet</b><p>Log today to start the run.</p></div>';
 }
