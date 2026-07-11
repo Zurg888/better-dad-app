@@ -1,11 +1,11 @@
 {
-  "name": "185 Mission",
-  "short_name": "185 Mission",
+  "name": "Galahad",
+  "short_name": "Galahad",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f13a16",
   "theme_color": "#f13a16",
-  "description": "Faith-forward weight, workout, protein, hydration, and daily check-in tracker.",
+  "description": "Faith-forward knight quest tracker for body, soul, fatherhood, and daily discipline.",
   "icons": [
     { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
     { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },

@@ -1,4 +1,4 @@
-const CACHE = 'better-dad-v7';
+const CACHE = 'galahad-v1';
 const ASSETS = [
   './index.html',
   './manifest.webmanifest',
