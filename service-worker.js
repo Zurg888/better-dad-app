@@ -1,8 +1,11 @@
-const CACHE = 'better-dad-v4';
+const CACHE = 'better-dad-v5';
 const ASSETS = [
   './index.html',
   './manifest.webmanifest',
   './icon.svg',
+  './icon-192.png',
+  './icon-512.png',
+  './apple-touch-icon.png',
   './assets/level-01.gif',
   './assets/level-02.gif',
   './assets/level-03.gif',

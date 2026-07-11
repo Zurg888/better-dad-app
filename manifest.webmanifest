@@ -1,12 +1,14 @@
 {
-  "name": "Better Dad — 185 Mission",
+  "name": "185 Mission",
   "short_name": "185 Mission",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#151515",
-  "theme_color": "#baff3d",
-  "description": "Sober cut tracker for weight loss, workouts, cravings, and daily check-ins.",
+  "background_color": "#f13a16",
+  "theme_color": "#f13a16",
+  "description": "Faith-forward weight, workout, protein, hydration, and daily check-in tracker.",
   "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
     { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }

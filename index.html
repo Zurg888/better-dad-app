@@ -8,7 +8,8 @@
   <meta name="apple-mobile-web-app-title" content="185 Mission" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./icon.svg" />
-  <title>Better Dad — 185 Mission</title>
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <title>185 Mission</title>
   <style>
     :root{
       --red:#f13a16;
@@ -47,7 +48,7 @@
     .panel{background:var(--panel);border:4px solid #000;box-shadow:var(--shadow);padding:12px;margin-bottom:12px;position:relative}.panel:before{content:"";position:absolute;inset:4px;border:1px solid rgba(255,210,63,.18);pointer-events:none}.panel.orange{background:linear-gradient(180deg,#ff9d19,#df5d12);color:var(--ink)}.panel.cream{background:var(--cream);color:var(--ink)}
     .sectionTitle{display:inline-block;background:var(--yellow);color:#111;border:3px solid #000;box-shadow:4px 4px 0 #000;font-family:var(--font-head);font-size:24px;text-transform:uppercase;letter-spacing:.02em;padding:4px 9px;margin:0 0 10px;transform:skew(-5deg)}.sectionTitle span{display:block;transform:skew(5deg)}
     .verse{font-family:Georgia,serif;font-weight:800;font-size:24px;line-height:1.16;margin:2px 0 8px;color:#140b06}.ref{font-family:var(--font-head);font-size:20px;text-transform:uppercase;margin:0;color:#3b1908}.focus{font-size:16px;line-height:1.25;font-weight:900;margin:12px 0 0;background:rgba(0,0,0,.12);border:2px solid #000;padding:9px}
-    .hud{display:grid;grid-template-columns:1fr;gap:10px;align-items:stretch}.portrait{background:#7d4e61;border:3px solid #000;min-height:188px;display:grid;place-items:center;position:relative;overflow:hidden}.portrait:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 48%,rgba(255,255,255,.07) 50%,transparent 52%) 0 0/100% 6px;pointer-events:none}.warriorGif{width:100%;height:auto;aspect-ratio:800/330;display:block;object-fit:contain;object-position:center;image-rendering:pixelated}.portrait.miss .warriorGif{filter:grayscale(.45);opacity:.9}.portrait.ready .warriorGif{filter:drop-shadow(0 0 8px rgba(255,210,63,.55))}.portrait.full .warriorGif{filter:drop-shadow(0 0 12px var(--green));animation:fullPulse .75s steps(2,end) infinite}.rank{background:#17100a;border:3px solid #000;text-align:center;padding:10px;display:flex;align-items:center;justify-content:space-between;gap:12px}.rank b{font-family:var(--font-head);font-size:30px;color:var(--green);text-shadow:2px 2px 0 #000;line-height:.9}.rank span{font-family:var(--font-mono);font-size:11px;color:var(--muted);font-weight:900;text-transform:uppercase}.hydrationBox{margin-top:10px;background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px;display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center}.waterGlass{width:54px;height:76px;border:4px solid #000;border-top-width:7px;border-radius:5px 5px 12px 12px;background:rgba(255,255,255,.18);position:relative;overflow:hidden;box-shadow:4px 4px 0 #000, inset 5px 0 0 rgba(255,255,255,.22);justify-self:center}.waterGlass:before{content:"";position:absolute;left:9px;top:8px;width:8px;height:50px;background:rgba(255,255,255,.35);z-index:3}.waterFill{position:absolute;left:0;right:0;bottom:0;height:0%;background:linear-gradient(180deg,#62e9ff,#168cff);border-top:3px solid #b8fbff;transition:height .45s ease;animation:waterWave 1.2s ease-in-out infinite}.waterFil... [truncated]
+    .hud{display:grid;grid-template-columns:1fr;gap:10px;align-items:stretch}.portrait{background:#7d4e61;border:3px solid #000;min-height:188px;display:grid;place-items:center;position:relative;overflow:hidden}.portrait:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 48%,rgba(255,255,255,.07) 50%,transparent 52%) 0 0/100% 6px;pointer-events:none}.warriorGif{width:100%;height:auto;aspect-ratio:800/330;display:block;object-fit:contain;object-position:center;image-rendering:pixelated}.portrait.miss .warriorGif{filter:grayscale(.45);opacity:.9}.portrait.ready .warriorGif{filter:drop-shadow(0 0 8px rgba(255,210,63,.55))}.portrait.full .warriorGif{filter:drop-shadow(0 0 12px var(--green));animation:fullPulse .75s steps(2,end) infinite}.rank{background:#17100a;border:3px solid #000;text-align:center;padding:10px;display:flex;align-items:center;justify-content:space-between;gap:12px}.rank b{font-family:var(--font-head);font-size:42px;color:var(--yellow);text-shadow:3px 3px 0 #000,-1px -1px 0 var(--orange);line-height:.82;letter-spacing:.03em}.rank span{font-family:var(--font-head);font-size:20px;color:var(--muted);font-weight:900;text-transform:uppercase;line-height:.9}.hydrationBox{margin-top:10px;background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px;display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center}.waterGlass{width:54px;height:76px;border:4px solid #000;border-top-width:7px;border-radius:5px 5px 12px 12px;background:rgba(255,255,255,.18);position:relative;overflow:hidden;box-shadow:4px 4px 0 #000, inset 5px 0 0 rgba(255,255,255,.22);justify-self:center}.waterGlass:before{content:"";position:absolute;left:9px;top:8px;width:8px;height:50px;background:rgba(255,255,255,.35);z-index:3}.waterFill{position:absolute;left:0;right:0;bottom:0;height:0%;background:linear-gradient(180deg,#62e9ff,#168cff);border-top:3px solid #b8fbff;transition:height .45s ease;animation:waterWave 1.2s ease-in-out infinite}.waterFil... [truncated]
     .progressBox{margin-top:10px}.barLabel{display:flex;justify-content:space-between;gap:10px;font-family:var(--font-head);font-size:20px;color:var(--yellow);text-transform:uppercase;margin-bottom:5px}.track{height:24px;background:#070504;border:3px solid #000;padding:3px}.fill{height:100%;width:0%;background:repeating-linear-gradient(90deg,var(--green) 0 12px,#6ecb35 12px 16px);box-shadow:0 0 12px rgba(141,255,74,.5);transition:width .3s ease}
     .statusStrip{background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px;margin-bottom:12px;display:flex;justify-content:space-between;gap:12px;align-items:center}.statusStrip b{font-family:var(--font-head);font-size:24px;color:var(--yellow);text-transform:uppercase}.statusStrip span{font-weight:900;color:var(--cream);font-size:16px;text-align:right}.statusStrip.missing{background:#3a100b}.statusStrip.missing b{color:#ffb23d}
     .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.metric{background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px;min-height:94px}.metric .name{font-family:var(--font-head);font-size:18px;text-transform:uppercase;color:var(--muted);line-height:.95}.metric .num{font-family:var(--font-head);font-size:36px;line-height:.9;color:var(--cream);text-shadow:2px 2px 0 #000;margin-top:16px}.metric.good .num{color:var(--green)}
@@ -59,7 +60,7 @@
 </head>
 <body>
   <div class="app">
-    <header class="masthead"><h1>Better Dad</h1><div class="sub">REAL LIFE MODE // 185 MISSION</div></header>
+    <header class="masthead"><h1>185 Mission</h1><div class="sub">REAL LIFE MODE // KNIGHT QUEST</div></header>
     <div class="topRow"><div class="date" id="todayDate">Today</div><div class="missionTag">Level 01</div></div>
     <nav class="tabs" aria-label="Sections">
       <button class="tab active" data-tab="home" onclick="showTab('home')">Today</button>
@@ -95,7 +96,7 @@
         <div class="metrics">
           <div class="metric good"><div class="name">Sober Streak</div><div class="num"><span id="streak">0</span>D</div></div>
           <div class="metric"><div class="name">Miles Week</div><div class="num"><span id="miles">0</span></div></div>
-          <div class="metric good"><div class="name">Protein</div><div class="num"><span id="protein">0</span>G</div></div>
+          <div class="metric good"><div class="name">Protein</div><div class="num"><span id="protein">0/185G</span></div></div>
           <div class="metric"><div class="name">Mood</div><div class="num"><span id="mood">—</span>/10</div></div>
         </div>
         <div class="actions"><button class="primary" onclick="showTab('checkin')">Log Today</button><button class="secondary" onclick="showTab('craving')">Reset</button></div>
@@ -143,7 +144,7 @@
   <div class="toast" id="toast">Saved.</div>
 
 <script>
-const START=210, TARGET=185, WATER_TARGET=6, KEY='betterDadLogs';
+const START=210, TARGET=185, WATER_TARGET=6, PROTEIN_TARGET=185, KEY='betterDadLogs';
 const verses=[
   {t:'“The Lord is my strength and my shield; in him my heart trusts.”', r:'Psalm 28:7', f:'Objective: choose presence over escape.'},
   {t:'“I can do all things through him who strengthens me.”', r:'Philippians 4:13', f:'Objective: one sober decision at a time.'},
@@ -163,7 +164,7 @@ function daysBetween(a,b){const [ay,am,ad]=a.split('-').map(Number), [by,bm,bd]=
 function showToast(t='Saved.'){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
 function showTab(id){document.querySelectorAll('.section,.tab').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll(`[data-tab="${id}"]`).forEach(x=>x.classList.add('active'));window.scrollTo({top:0,behavior:'smooth'});}
 function soberStreak(v){let s=0; const byDate=Object.fromEntries(v.map(l=>[l.date,l])); let cursor=today(); while(byDate[cursor] && byDate[cursor].sober==='yes' && Number(byDate[cursor].drinks||0)===0){s++; cursor=addDays(cursor,-1)} return s;}
-function checkinInfo(v){const t=today(); const fullLogs=v.filter(l=>!l.partial); const sorted=[...fullLogs].sort((a,b)=>b.date.localeCompare(a.date)); const latest=sorted[0]; const todayLog=fullLogs.find(l=>l.date===t); if(todayLog) return {logged:true, label:'Logged Today', detail: todayLog.sober==='yes' && Number(todayLog.drinks||0)===0 ? 'Mission clear: sober' : 'Honest log saved'}; if(!latest) return {logged:false, label:'Not Logged', detail:'No check-in today'}; const gap=daysBetween(latest.date,t); return {logged:false, label:'Missed Log', detail: gap===1 ? 'Last log was yesterday' : `Last log ${gap} days ago`};}
+function checkinInfo(v){const t=today(); const fullLogs=v.filter(l=>!l.partial); const sorted=[...fullLogs].sort((a,b)=>b.date.localeCompare(a.date)); const latest=sorted[0]; const todayLog=fullLogs.find(l=>l.date===t); if(todayLog) return {logged:true, label:'Logged Today', detail: todayLog.sober==='yes' && Number(todayLog.drinks||0)===0 ? 'Quest complete: clean day' : 'Honest log saved'}; if(!latest) return {logged:false, label:'Not Logged', detail:'No check-in today'}; const gap=daysBetween(latest.date,t); return {logged:false, label:'Missed Log', detail: gap===1 ? 'Last log was yesterday' : `Last log ${gap} days ago`};}
 function setVerse(){const d=new Date(); const start=new Date(d.getFullYear(),0,0); const day=Math.floor((d-start)/86400000); const v=verses[day%verses.length]; $('verseText').textContent=v.t; $('verseRef').textContent=v.r; $('reflection').textContent=v.f; $('todayDate').textContent=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}).toUpperCase();}
 function render(){
   const v=logs();
@@ -192,7 +193,7 @@ function render(){
   const waterPct=Math.max(0, Math.min(100, (water/WATER_TARGET)*100));
   $('waterCount').textContent=`${water}/${WATER_TARGET} bottles`;
   $('waterFill').style.height=waterPct+'%';
-  $('protein').textContent=info.logged ? (latest.protein||0) : 0;
+  $('protein').textContent=info.logged ? `${latest.protein||0}/${PROTEIN_TARGET}G` : `0/${PROTEIN_TARGET}G`;
   $('mood').textContent=info.logged ? (latest.mood||'—') : '—';
   const weekAgo=Date.now()-6*864e5;
   const miles=v.filter(l=>new Date(l.date+'T00:00:00').getTime()>=weekAgo).reduce((a,l)=>a+Number(l.miles||0),0);
