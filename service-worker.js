@@ -1,4 +1,4 @@
-const CACHE = 'galahad-v1';
+const CACHE = 'galahad-v2';
 const ASSETS = [
   './index.html',
   './manifest.webmanifest',
