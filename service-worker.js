@@ -1,4 +1,4 @@
-const CACHE = 'galahad-v6';
+const CACHE = 'galahad-v7';
 const ASSETS = [
   './manifest.webmanifest',
   './icon.svg',
@@ -10,6 +10,11 @@ const ASSETS = [
   './assets/level-03.gif',
   './assets/level-04.gif',
   './assets/level-05.gif',
+  './assets/gear-level-01.png',
+  './assets/gear-level-02.png',
+  './assets/gear-level-03.png',
+  './assets/gear-level-04.png',
+  './assets/gear-level-05.png',
   './assets/warrior-base.svg',
   './assets/warrior-leather.svg',
   './assets/warrior-chain.svg',
