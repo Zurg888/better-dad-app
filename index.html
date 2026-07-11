@@ -239,7 +239,7 @@ function resetRules(){saveRules(DEFAULT_RULES); loadRulesForm(); render(); showT
 function quickAddWater(){let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Chalice +1')};
 let int=null, left=600; function startTimer(){clearInterval(int); left=600; $('timer').textContent='10:00'; int=setInterval(()=>{left--; const m=String(Math.floor(left/60)).padStart(2,'0'), s=String(left%60).padStart(2,'0'); $('timer').textContent=`${m}:${s}`; if(left<=0){clearInterval(int); showToast('Reset complete')}},1000)}
 migrateStorage(); setVerse(); updateDrinksField(); loadRulesForm(); render();
-if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./service-worker.js').then(r=>r.update()).catch(()=>{});
 </script>
 </body>
 </html>
