@@ -78,6 +78,7 @@
           <p class="verse" id="verseText">“The Lord is my strength and my shield; in him my heart trusts.”</p>
           <p class="ref" id="verseRef">Psalm 28:7</p>
           <p class="focus" id="reflection">Today’s focus: choose presence over escape.</p>
+          <button class="secondary" style="margin-top:10px" onclick="readDailyVerse()" type="button">Read Verse Aloud</button>
         </article>
 
         <div class="statusStrip" id="checkinStrip"><b id="checkinStatus">Not Logged</b><span id="lastCheckin">No check-in today</span></div>
@@ -181,6 +182,7 @@ const verses=[
   {t:'“Let us not grow weary of doing good, for in due season we will reap.”', r:'Galatians 6:9', f:'Objective: consistency compounds.'}
 ];
 const $=id=>document.getElementById(id);
+const WATER_SFX_BOOST=2, MUSIC_VOLUME=.15;
 const KNIGHT_RANKS=[
   {name:'Page', days:0, desc:'Begin the quest. Show up, learn the rules, log honestly.'},
   {name:'Squire', days:3, desc:'Three clean days. Build rhythm and serve the mission.'},
@@ -224,18 +226,36 @@ function tone(freq, when, dur, type='triangle', vol=.05){
 function playWaterSound(){
   const ctx=ensureAudio(); if(!ctx) return;
   const now=ctx.currentTime;
-  tone(720, now, .18, 'sine', .07); tone(430, now+.08, .22, 'sine', .05);
+  tone(720, now, .18, 'sine', .07*WATER_SFX_BOOST); tone(430, now+.08, .22, 'sine', .05*WATER_SFX_BOOST);
   const buffer=ctx.createBuffer(1, ctx.sampleRate*.28, ctx.sampleRate), data=buffer.getChannelData(0);
   for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
   const src=ctx.createBufferSource(), filter=ctx.createBiquadFilter(), gain=ctx.createGain();
   src.buffer=buffer; filter.type='bandpass'; filter.frequency.value=950; filter.Q.value=1.1;
-  gain.gain.setValueAtTime(.09, now); gain.gain.exponentialRampToValueAtTime(.0001, now+.28);
+  gain.gain.setValueAtTime(.09*WATER_SFX_BOOST, now); gain.gain.exponentialRampToValueAtTime(.0001, now+.28);
   src.connect(filter).connect(gain).connect(ctx.destination); src.start(now);
+}
+function playLevelUpSound(){
+  const ctx=ensureAudio(); if(!ctx) return;
+  const now=ctx.currentTime;
+  [196,247,294,392,494,587,784].forEach((f,i)=>tone(f, now+i*.075, .22, i%2?'triangle':'square', .09));
+  tone(988, now+.58, .55, 'sawtooth', .055);
+}
+function readDailyVerse(){
+  if(!('speechSynthesis' in window)){showToast('Voice not supported'); return;}
+  const text=`${$('verseText').textContent.replace(/[“”]/g,'')} ${$('verseRef').textContent}. ${$('reflection').textContent}`;
+  speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(text);
+  const voices=speechSynthesis.getVoices();
+  utterance.voice=voices.find(v=>/daniel|arthur|fred|george|thomas|english|male/i.test(v.name))||voices.find(v=>/en-/i.test(v.lang))||null;
+  utterance.rate=.82;
+  utterance.pitch=.55;
+  utterance.volume=1;
+  speechSynthesis.speak(utterance);
 }
 function setMusicButton(on){$('musicBtn').textContent=on?'♪ On':'♪ Off'; $('musicBtn').classList.toggle('on', on);}
 function startShireMusic(){
   const audio=$('bgMusic'); if(!audio) return;
-  audio.volume=.45;
+  audio.volume=MUSIC_VOLUME;
   const play=audio.play();
   if(play && play.then) play.then(()=>{musicOn=true; setMusicButton(true)}).catch(()=>{musicOn=false; setMusicButton(false)});
   else {musicOn=true; setMusicButton(true)}
@@ -297,7 +317,7 @@ function render(){
 }
 function updateDrinksField(){const show=$('sober').value==='no'; $('drinksField').classList.toggle('hidden', !show); if(!show) $('drinks').value=0;}
 $('sober').addEventListener('change', updateDrinksField);
-$('form').addEventListener('submit',e=>{e.preventDefault(); updateDrinksField(); const r=rules(); let currentLogs=logs(); const previousToday=currentLogs.find(l=>l.date===today())||{}; const entry={date:today(),weight:$('weight').value||r.start,sober:$('sober').value,drinks:$('sober').value==='no' ? ($('drinks').value||0) : 0,water:$('waterIn').value||previousToday.water||0,protein:$('proteinIn').value||0,miles:$('milesIn').value||0,workout:$('workout').value,mood:$('moodIn').value||'',partial:false}; let v=currentLogs.filter(l=>l.date!==entry.date); v.push(entry); saveLogs(v); render(); showToast('Log saved'); showTab('home')});
+$('form').addEventListener('submit',e=>{e.preventDefault(); updateDrinksField(); const r=rules(); let currentLogs=logs(); const beforeLevel=knightLevel(soberStreak(currentLogs)); const previousToday=currentLogs.find(l=>l.date===today())||{}; const entry={date:today(),weight:$('weight').value||r.start,sober:$('sober').value,drinks:$('sober').value==='no' ? ($('drinks').value||0) : 0,water:$('waterIn').value||previousToday.water||0,protein:$('proteinIn').value||0,miles:$('milesIn').value||0,workout:$('workout').value,mood:$('moodIn').value||'',partial:false}; let v=currentLogs.filter(l=>l.date!==entry.date); v.push(entry); saveLogs(v); render(); if(knightLevel(soberStreak(v))>beforeLevel) playLevelUpSound(); showToast('Log saved'); showTab('home')});
 function updateAlcoholFields(){const show=$('alcoholModeIn').value==='limit'; $('weeklyDrinkLimitField').classList.toggle('hidden', !show); if(!show) $('weeklyDrinkLimitIn').value=0;}
 function loadRulesForm(){const r=rules(); $('startTargetIn').value=r.start; $('weightTargetIn').value=r.target; $('proteinTargetIn').value=r.protein; $('alcoholModeIn').value=r.alcoholMode||'zero'; $('weeklyDrinkLimitIn').value=Number(r.weeklyDrinkLimit||0); updateAlcoholFields();}
 $('rulesForm').addEventListener('submit',e=>{e.preventDefault(); const mode=$('alcoholModeIn').value; const next={start:Number($('startTargetIn').value)||DEFAULT_RULES.start,target:Number($('weightTargetIn').value)||DEFAULT_RULES.target,protein:Number($('proteinTargetIn').value)||DEFAULT_RULES.protein,alcoholMode:mode,weeklyDrinkLimit:mode==='limit'?Math.max(0,Number($('weeklyDrinkLimitIn').value)||0):0}; saveRules(next); render(); loadRulesForm(); showToast('Rules saved'); showTab('home')});
