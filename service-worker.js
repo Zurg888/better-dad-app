@@ -1,5 +1,15 @@
-const CACHE = 'better-dad-v2';
-const ASSETS = ['./index.html', './manifest.webmanifest', './icon.svg', './assets/warrior.gif'];
+const CACHE = 'better-dad-v3';
+const ASSETS = [
+  './index.html',
+  './manifest.webmanifest',
+  './icon.svg',
+  './assets/warrior-base.svg',
+  './assets/warrior-leather.svg',
+  './assets/warrior-chain.svg',
+  './assets/warrior-shield.svg',
+  './assets/warrior-plate.svg',
+  './assets/warrior-legend.svg'
+];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
 });
