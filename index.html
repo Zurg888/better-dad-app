@@ -96,7 +96,7 @@
         </div>
 
         <div class="metrics">
-          <div class="metric good"><div class="name">Sober Streak</div><div class="num"><span id="streak">0</span>D</div></div>
+          <div class="metric good"><div class="name">Quest Streak</div><div class="num"><span id="streak">0</span>D</div></div>
           <div class="metric"><div class="name">Knight Travel</div><div class="num"><span id="miles">0</span></div></div>
           <div class="metric good"><div class="name">Protein</div><div class="num"><span id="protein">0/185G</span></div></div>
           <div class="metric"><div class="name">Mood</div><div class="num"><span id="mood">—</span>/10</div></div>
@@ -157,7 +157,9 @@
           <div class="field"><label>Starting weight</label><input id="startTargetIn" type="number" min="1" step="0.1" placeholder="210"></div>
           <div class="field"><label>Goal weight</label><input id="weightTargetIn" type="number" min="1" step="0.1" placeholder="185"></div>
           <div class="field"><label>Protein target</label><input id="proteinTargetIn" type="number" min="1" step="1" placeholder="185"></div>
-          <p class="settingsNote">Your rules save on this device only. Change them anytime without losing logs.</p>
+          <div class="field"><label>Alcohol quest</label><select id="alcoholModeIn" onchange="updateAlcoholFields()"><option value="zero">Zero drinks / sober quest</option><option value="limit">Weekly drink limit</option></select></div>
+          <div class="field hidden" id="weeklyDrinkLimitField"><label>Drinks allowed per week</label><input id="weeklyDrinkLimitIn" type="number" min="0" step="1" placeholder="7"></div>
+          <p class="settingsNote">Your rules save on this device only. Choose zero drinks or a weekly drink limit. Knights rank up while staying inside their rule.</p>
           <div class="miniRow"><button class="primary" type="submit">Save Rules</button><button class="secondary" type="button" onclick="resetRules()">Reset</button></div>
         </form>
       </section>
@@ -168,7 +170,7 @@
   <audio id="bgMusic" src="./assets/background-music.mp3" loop preload="auto"></audio>
 
 <script>
-const DEFAULT_RULES={start:210,target:185,protein:185}, WATER_TARGET=6, KEY='galahadLogs', OLD_KEY='betterDadLogs', RULES_KEY='galahadRules', OLD_RULES_KEY='betterDadRules';
+const DEFAULT_RULES={start:210,target:185,protein:185,alcoholMode:'zero',weeklyDrinkLimit:0}, WATER_TARGET=6, KEY='galahadLogs', OLD_KEY='betterDadLogs', RULES_KEY='galahadRules', OLD_RULES_KEY='betterDadRules';
 const verses=[
   {t:'“The Lord is my strength and my shield; in him my heart trusts.”', r:'Psalm 28:7', f:'Objective: choose presence over escape.'},
   {t:'“I can do all things through him who strengthens me.”', r:'Philippians 4:13', f:'Objective: one sober decision at a time.'},
@@ -242,18 +244,22 @@ function stopShireMusic(){const audio=$('bgMusic'); if(audio) audio.pause(); mus
 function toggleShireMusic(){musicOn?stopShireMusic():startShireMusic();}
 function armFirstTapMusic(e){if(e.target && e.target.id==='musicBtn') return; document.removeEventListener('pointerdown', armFirstTapMusic); startShireMusic();}
 document.addEventListener('pointerdown', armFirstTapMusic);
-function soberStreak(v){let s=0; const byDate=Object.fromEntries(v.map(l=>[l.date,l])); let cursor=today(); while(byDate[cursor] && byDate[cursor].sober==='yes' && Number(byDate[cursor].drinks||0)===0){s++; cursor=addDays(cursor,-1)} return s;}
-function checkinInfo(v){const t=today(); const fullLogs=v.filter(l=>!l.partial); const sorted=[...fullLogs].sort((a,b)=>b.date.localeCompare(a.date)); const latest=sorted[0]; const todayLog=fullLogs.find(l=>l.date===t); if(todayLog) return {logged:true, label:'Logged Today', detail: todayLog.sober==='yes' && Number(todayLog.drinks||0)===0 ? 'Quest complete: clean day' : 'Honest log saved'}; if(!latest) return {logged:false, label:'Not Logged', detail:'No check-in today'}; const gap=daysBetween(latest.date,t); return {logged:false, label:'Missed Log', detail: gap===1 ? 'Last log was yesterday' : `Last log ${gap} days ago`};}
+function fullLogs(v){return v.filter(l=>!l.partial)}
+function weekDrinkTotal(v,endKey){return fullLogs(v).filter(l=>daysBetween(l.date,endKey)>=0 && daysBetween(l.date,endKey)<=6).reduce((a,l)=>a+Number(l.drinks||0),0)}
+function alcoholRuleText(r){return r.alcoholMode==='limit' ? `≤${Number(r.weeklyDrinkLimit||0)} drinks/week` : '0 drinks'}
+function questClear(log,v,r){if(!log) return false; if(r.alcoholMode==='limit') return weekDrinkTotal(v,log.date)<=Number(r.weeklyDrinkLimit||0); return log.sober==='yes' && Number(log.drinks||0)===0}
+function soberStreak(v){let s=0; const r=rules(); const byDate=Object.fromEntries(fullLogs(v).map(l=>[l.date,l])); let cursor=today(); while(byDate[cursor] && questClear(byDate[cursor],v,r)){s++; cursor=addDays(cursor,-1)} return s;}
+function checkinInfo(v){const r=rules(); const t=today(); const sorted=[...fullLogs(v)].sort((a,b)=>b.date.localeCompare(a.date)); const latest=sorted[0]; const todayLog=fullLogs(v).find(l=>l.date===t); if(todayLog){const clear=questClear(todayLog,v,r); return {logged:true, clear, label: clear?'Logged Today':'Limit Broken', detail: clear ? (r.alcoholMode==='limit' ? `Quest clear: ${weekDrinkTotal(v,t)}/${Number(r.weeklyDrinkLimit||0)} weekly drinks` : 'Quest complete: clean day') : 'Weekly limit passed — streak resets'};} if(!latest) return {logged:false, clear:false, label:'Not Logged', detail:'No check-in today'}; const gap=daysBetween(latest.date,t); return {logged:false, clear:false, label:'Missed Log', detail: gap===1 ? 'Last log was yesterday' : `Last log ${gap} days ago`};}
 function setVerse(){const d=new Date(); const start=new Date(d.getFullYear(),0,0); const day=Math.floor((d-start)/86400000); const v=verses[day%verses.length]; $('verseText').textContent=v.t; $('verseRef').textContent=v.r; $('reflection').textContent=v.f; $('todayDate').textContent=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}).toUpperCase();}
 function render(){
   const v=logs();
-  const sorted=v.filter(l=>!l.partial).sort((a,b)=>a.date.localeCompare(b.date));
+  const sorted=fullLogs(v).sort((a,b)=>a.date.localeCompare(b.date));
   const latest=sorted[sorted.length-1]||{};
+  const r=rules();
   const info=checkinInfo(v);
   $('checkinStatus').textContent=info.label;
   $('lastCheckin').textContent=info.detail;
-  $('checkinStrip').classList.toggle('missing', !info.logged);
-  const r=rules();
+  $('checkinStrip').classList.toggle('missing', !info.logged || !info.clear);
   const current=Number(latest.weight||r.start);
   const lost=Math.max(0, r.start-current);
   const total=Math.max(1, r.start-r.target);
@@ -280,15 +286,16 @@ function render(){
   const weekAgo=Date.now()-6*864e5;
   const miles=v.filter(l=>new Date(l.date+'T00:00:00').getTime()>=weekAgo).reduce((a,l)=>a+Number(l.miles||0),0);
   $('miles').textContent=miles.toFixed(1).replace('.0','')+' MI';
-  $('questSummary').textContent=`Target: ${fmt(r.target)} lb · Protein: ${r.protein}g/day. Current rank: ${KNIGHT_RANKS[level-1].name}.`;
+  $('questSummary').textContent=`Target: ${fmt(r.target)} lb · Protein: ${r.protein}g/day · Alcohol: ${alcoholRuleText(r)}. Current rank: ${KNIGHT_RANKS[level-1].name}.`;
   renderRankBoard(st,level);
-  $('history').innerHTML=v.filter(l=>!l.partial).slice(-10).reverse().map(l=>`<div class="historyItem"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${l.date}</b><p>${l.weight||'—'} lb · ${l.protein||0}g protein · ${l.water||0}/${WATER_TARGET} chalices · ${l.miles||0} road mi · mood ${l.mood||'—'}/10</p></div><div class="${l.sober==='yes'?'check':'x'}">${l.sober==='yes'?'CLEAR':'LOGGED'}</div></div></div>`).join('')||'<div class="historyItem"><b>No logs yet</b><p>Log today to start the run.</p></div>';
+  $('history').innerHTML=fullLogs(v).slice(-10).reverse().map(l=>{const clear=questClear(l,v,r); return `<div class="historyItem"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${l.date}</b><p>${l.weight||'—'} lb · ${l.protein||0}g protein · ${l.water||0}/${WATER_TARGET} chalices · ${l.miles||0} road mi · ${l.drinks||0} drinks · mood ${l.mood||'—'}/10</p></div><div class="${clear?'check':'x'}">${clear?'CLEAR':'RESET'}</div></div></div>`}).join('')||'<div class="historyItem"><b>No logs yet</b><p>Log today to start the run.</p></div>';
 }
 function updateDrinksField(){const show=$('sober').value==='no'; $('drinksField').classList.toggle('hidden', !show); if(!show) $('drinks').value=0;}
 $('sober').addEventListener('change', updateDrinksField);
 $('form').addEventListener('submit',e=>{e.preventDefault(); updateDrinksField(); const r=rules(); let currentLogs=logs(); const previousToday=currentLogs.find(l=>l.date===today())||{}; const entry={date:today(),weight:$('weight').value||r.start,sober:$('sober').value,drinks:$('sober').value==='no' ? ($('drinks').value||0) : 0,water:$('waterIn').value||previousToday.water||0,protein:$('proteinIn').value||0,miles:$('milesIn').value||0,workout:$('workout').value,mood:$('moodIn').value||'',partial:false}; let v=currentLogs.filter(l=>l.date!==entry.date); v.push(entry); saveLogs(v); render(); showToast('Log saved'); showTab('home')});
-function loadRulesForm(){const r=rules(); $('startTargetIn').value=r.start; $('weightTargetIn').value=r.target; $('proteinTargetIn').value=r.protein;}
-$('rulesForm').addEventListener('submit',e=>{e.preventDefault(); const next={start:Number($('startTargetIn').value)||DEFAULT_RULES.start,target:Number($('weightTargetIn').value)||DEFAULT_RULES.target,protein:Number($('proteinTargetIn').value)||DEFAULT_RULES.protein}; saveRules(next); render(); loadRulesForm(); showToast('Rules saved'); showTab('home')});
+function updateAlcoholFields(){const show=$('alcoholModeIn').value==='limit'; $('weeklyDrinkLimitField').classList.toggle('hidden', !show); if(!show) $('weeklyDrinkLimitIn').value=0;}
+function loadRulesForm(){const r=rules(); $('startTargetIn').value=r.start; $('weightTargetIn').value=r.target; $('proteinTargetIn').value=r.protein; $('alcoholModeIn').value=r.alcoholMode||'zero'; $('weeklyDrinkLimitIn').value=Number(r.weeklyDrinkLimit||0); updateAlcoholFields();}
+$('rulesForm').addEventListener('submit',e=>{e.preventDefault(); const mode=$('alcoholModeIn').value; const next={start:Number($('startTargetIn').value)||DEFAULT_RULES.start,target:Number($('weightTargetIn').value)||DEFAULT_RULES.target,protein:Number($('proteinTargetIn').value)||DEFAULT_RULES.protein,alcoholMode:mode,weeklyDrinkLimit:mode==='limit'?Math.max(0,Number($('weeklyDrinkLimitIn').value)||0):0}; saveRules(next); render(); loadRulesForm(); showToast('Rules saved'); showTab('home')});
 function resetRules(){saveRules(DEFAULT_RULES); loadRulesForm(); render(); showToast('Rules reset')}
 function quickAddWater(){playWaterSound(); let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Chalice +1')};
 let int=null, left=600; function startTimer(){clearInterval(int); left=600; $('timer').textContent='10:00'; int=setInterval(()=>{left--; const m=String(Math.floor(left/60)).padStart(2,'0'), s=String(left%60).padStart(2,'0'); $('timer').textContent=`${m}:${s}`; if(left<=0){clearInterval(int); showToast('Reset complete')}},1000)}
