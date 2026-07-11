@@ -55,7 +55,7 @@
     .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.btn,.primary,.secondary,.danger{min-height:52px;border:3px solid #000;box-shadow:4px 4px 0 #000;font-family:var(--font-head);font-size:22px;text-transform:uppercase;letter-spacing:.02em}.primary{background:var(--yellow);color:var(--ink);width:100%}.secondary{background:#2a1b10;color:var(--cream);width:100%}.danger{background:var(--danger);color:#fff;width:100%}.btn:active,.primary:active,.secondary:active,.danger:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #000}
     form{display:grid;gap:10px}.field{background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px}.field.hidden{display:none}.field label{display:block;font-family:var(--font-head);font-size:20px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px}.field input,.field select{width:100%;min-height:48px;background:#fff5cf;color:#111;border:3px solid #000;padding:10px;font-size:20px;font-weight:900}
     .bodyText{font-size:18px;line-height:1.28;font-weight:850;margin:0}.list{display:grid;gap:10px}.historyItem{background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:10px}.historyItem b{font-family:var(--font-head);font-size:21px;color:var(--yellow);text-transform:uppercase}.historyItem p{margin:4px 0 0;color:var(--cream);font-weight:800}.check{color:var(--green);font-family:var(--font-head);font-size:22px}.x{color:var(--danger);font-family:var(--font-head);font-size:22px}.timer{font-family:var(--font-head);font-size:68px;text-align:center;color:var(--green);text-shadow:3px 3px 0 #000;margin:8px 0}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(18px);opacity:0;background:var(--yellow);color:#111;border:3px solid #000;box-shadow:5px 5px 0 #000;padding:10px 14px;font-family:var(--font-head);font-size:20px;text-transform:uppercase;z-index:20;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-    @media(max-width:390px){.app{padding:10px 9px 30px}.masthead h1{font-size:39px}.tab{font-size:15px}.metrics{grid-template-columns:1fr 1fr}.metric .num{font-size:31px}.verse{font-size:21px}.actions{grid-template-columns:1fr}.missionTag{font-size:17px}.sectionTitle{font-size:22px}.portrait{min-height:154px}}
+    .waterLine{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px}.waterLine b{font-family:var(--font-head);font-size:22px;color:var(--cream);text-transform:uppercase}.waterAdd{min-width:70px;min-height:44px;background:linear-gradient(180deg,var(--yellow),var(--orange));color:#14100b;border:3px solid #000;box-shadow:4px 4px 0 #000;font-family:var(--font-head);font-size:21px;text-transform:uppercase;letter-spacing:.02em;transform:skew(-6deg)}.waterAdd span{display:block;transform:skew(6deg)}.waterAdd:before{content:'♕';margin-right:4px}.waterAdd:active{transform:skew(-6deg) translate(3px,3px);box-shadow:1px 1px 0 #000}.settingsDock{margin-top:18px;padding-bottom:8px}.settingsBtn{width:100%;min-height:54px;background:#080706;color:var(--yellow);border:4px solid #000;box-shadow:6px 6px 0 #000;font-family:var(--font-head);font-size:24px;text-transform:uppercase;letter-spacing:.04em}.settingsBtn span{color:var(--cream);font-size:18px}.settingsGrid{display:grid;gap:10px}.settingsNote{font-size:16px;font-weight:900;line-height:1.25;margin:0 0 10px;background:rgba(0,0,0,.14);border:2px solid #000;padding:9px}.miniRow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.miniRow .secondary,.miniRow .primary{min-height:48px;font-size:20px}@media(max-width:390px){.app{padding:10px 9px 30px}.masthead h1{font-size:39px}.tab{font-size:15px}.metrics{grid-template-columns:1fr 1fr}.metric .num{font-size:31px}.verse{font-size:21px}.actions{grid-template-columns:1fr}.missionTag{font-size:17px}.sectionTitle{font-size:22px}.portrait{min-height:154px}.waterLine{align-items:stretch;flex-direction:column}.waterAdd{width:100%}}
   </style>
 </head>
 <body>
@@ -85,9 +85,9 @@
             <div class="portrait miss" id="warriorPortrait"><img class="warriorGif" id="warriorImg" src="./assets/level-01.gif" alt="Animated pixel knight level scene"></div>
             <div class="rank"><span>Knight Level</span><b id="status">LVL 01</b></div>
           </div>
-          <div class="hydrationBox"><div class="waterGlass" aria-label="Water bottle progress"><div class="waterFill" id="waterFill"></div><div class="waterBubbles"></div></div><div><span>Hydration</span><div class="waterLine"><b id="waterCount">0/6 bottles</b><button class="waterAdd" onclick="quickAddWater()" aria-label="Add one water bottle"><span>+1</span></button></div></div></div>
+          <div class="hydrationBox"><div class="waterGlass" aria-label="Chalice progress"><div class="waterFill" id="waterFill"></div><div class="waterBubbles"></div></div><div><span>Hydration</span><div class="waterLine"><b id="waterCount">0/6 chalices</b><button class="waterAdd" onclick="quickAddWater()" aria-label="Add one chalice"><span>+1</span></button></div></div></div>
           <div class="progressBox">
-            <div class="barLabel"><span>Weight Quest</span><span><span id="curW">210</span> → 185</span></div>
+            <div class="barLabel"><span>Weight Quest</span><span><span id="curW">210</span> → <span id="targetW">185</span></span></div>
             <div class="track"><div class="fill" id="weightFill"></div></div>
             <div class="barLabel"><span>Lost</span><span><span id="lost">0</span> LB</span></div>
           </div>
@@ -108,7 +108,7 @@
           <div class="field"><label>Today's weight</label><input id="weight" type="number" step="0.1" placeholder="210.0"></div>
           <div class="field"><label>Sober today?</label><select id="sober"><option value="yes">Yes — no alcohol</option><option value="no">No — log it honestly</option></select></div>
           <div class="field hidden" id="drinksField"><label>Drinks</label><input id="drinks" type="number" min="0" value="0"></div>
-          <div class="field"><label>Water bottles</label><input id="waterIn" type="number" min="0" max="12" step="1" placeholder="6"></div>
+          <div class="field"><label>Water chalices</label><input id="waterIn" type="number" min="0" max="12" step="1" placeholder="6"></div>
           <div class="field"><label>Protein grams</label><input id="proteinIn" type="number" min="0" placeholder="180"></div>
           <div class="field"><label>Miles run/walked</label><input id="milesIn" type="number" min="0" step="0.1" placeholder="1"></div>
           <div class="field"><label>Workout</label><select id="workout"><option>Rest / walk</option><option>Lift A</option><option>Lift B</option><option>Run</option></select></div>
@@ -118,7 +118,7 @@
       </section>
 
       <section id="progress" class="section">
-        <div class="panel"><h2 class="sectionTitle"><span>Quest Board</span></h2><p class="bodyText">Target: 185. Muscular 190 still counts as a win. Sober, strong, present.</p></div>
+        <div class="panel"><h2 class="sectionTitle"><span>Quest Board</span></h2><p class="bodyText" id="questSummary">Set your King’s Rules, then chase the quest. Sober, strong, present.</p></div>
         <div class="list" id="history"></div>
       </section>
 
@@ -139,12 +139,24 @@
           <button class="secondary" onclick="showTab('checkin')" style="margin-top:10px">Log Honestly</button>
         </div>
       </section>
+
+      <section id="rules" class="section">
+        <div class="panel orange"><h2 class="sectionTitle"><span>King’s Rules</span></h2><p class="bodyText">Set the quest for your body. This app should serve every knight, not just one target.</p></div>
+        <form id="rulesForm" class="settingsGrid">
+          <div class="field"><label>Starting weight</label><input id="startTargetIn" type="number" min="1" step="0.1" placeholder="210"></div>
+          <div class="field"><label>Goal weight</label><input id="weightTargetIn" type="number" min="1" step="0.1" placeholder="185"></div>
+          <div class="field"><label>Protein target</label><input id="proteinTargetIn" type="number" min="1" step="1" placeholder="185"></div>
+          <p class="settingsNote">Your rules save on this device only. Change them anytime without losing logs.</p>
+          <div class="miniRow"><button class="primary" type="submit">Save Rules</button><button class="secondary" type="button" onclick="resetRules()">Reset</button></div>
+        </form>
+      </section>
     </main>
+    <div class="settingsDock"><button class="settingsBtn" onclick="showTab('rules')">King’s Rules <span>⚙</span></button></div>
   </div>
   <div class="toast" id="toast">Saved.</div>
 
 <script>
-const START=210, TARGET=185, WATER_TARGET=6, PROTEIN_TARGET=185, KEY='betterDadLogs';
+const DEFAULT_RULES={start:210,target:185,protein:185}, WATER_TARGET=6, KEY='betterDadLogs', RULES_KEY='betterDadRules';
 const verses=[
   {t:'“The Lord is my strength and my shield; in him my heart trusts.”', r:'Psalm 28:7', f:'Objective: choose presence over escape.'},
   {t:'“I can do all things through him who strengthens me.”', r:'Philippians 4:13', f:'Objective: one sober decision at a time.'},
@@ -157,6 +169,9 @@ const verses=[
 const $=id=>document.getElementById(id);
 function logs(){return JSON.parse(localStorage.getItem(KEY)||'[]')}
 function saveLogs(v){localStorage.setItem(KEY,JSON.stringify(v))}
+function rules(){return {...DEFAULT_RULES,...JSON.parse(localStorage.getItem(RULES_KEY)||'{}')}}
+function saveRules(v){localStorage.setItem(RULES_KEY,JSON.stringify(v))}
+function fmt(n){return Number(n).toFixed(1).replace('.0','')}
 function today(){const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function addDays(key,n){const [y,m,d]=key.split('-').map(Number); const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()+n); return dateKey(dt)}
@@ -174,11 +189,14 @@ function render(){
   $('checkinStatus').textContent=info.label;
   $('lastCheckin').textContent=info.detail;
   $('checkinStrip').classList.toggle('missing', !info.logged);
-  const current=Number(latest.weight||START);
-  const lost=Math.max(0, START-current);
-  const pct=Math.max(0,Math.min(100,(lost/(START-TARGET))*100));
-  $('lost').textContent=lost.toFixed(1).replace('.0','');
-  $('curW').textContent=current.toFixed(1).replace('.0','');
+  const r=rules();
+  const current=Number(latest.weight||r.start);
+  const lost=Math.max(0, r.start-current);
+  const total=Math.max(1, r.start-r.target);
+  const pct=Math.max(0,Math.min(100,(lost/total)*100));
+  $('lost').textContent=fmt(lost);
+  $('curW').textContent=fmt(current);
+  $('targetW').textContent=fmt(r.target);
   $('weightFill').style.width=pct+'%';
   const st=soberStreak(v);
   $('streak').textContent=st;
@@ -191,21 +209,25 @@ function render(){
   const todayLog=v.find(l=>l.date===today())||{};
   const water=Math.max(0, Number(todayLog.water||0));
   const waterPct=Math.max(0, Math.min(100, (water/WATER_TARGET)*100));
-  $('waterCount').textContent=`${water}/${WATER_TARGET} bottles`;
+  $('waterCount').textContent=`${water}/${WATER_TARGET} chalices`;
   $('waterFill').style.height=waterPct+'%';
-  $('protein').textContent=info.logged ? `${latest.protein||0}/${PROTEIN_TARGET}G` : `0/${PROTEIN_TARGET}G`;
+  $('protein').textContent=info.logged ? `${latest.protein||0}/${r.protein}G` : `0/${r.protein}G`;
   $('mood').textContent=info.logged ? (latest.mood||'—') : '—';
   const weekAgo=Date.now()-6*864e5;
   const miles=v.filter(l=>new Date(l.date+'T00:00:00').getTime()>=weekAgo).reduce((a,l)=>a+Number(l.miles||0),0);
   $('miles').textContent=miles.toFixed(1).replace('.0','');
-  $('history').innerHTML=v.filter(l=>!l.partial).slice(-10).reverse().map(l=>`<div class="historyItem"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${l.date}</b><p>${l.weight||'—'} lb · ${l.protein||0}g protein · ${l.water||0}/${WATER_TARGET} water · ${l.miles||0} mi · mood ${l.mood||'—'}/10</p></div><div class="${l.sober==='yes'?'check':'x'}">${l.sober==='yes'?'CLEAR':'LOGGED'}</div></div></div>`).join('')||'<div class="historyItem"><b>No logs yet</b><p>Log today to start the run.</p></div>';
+  $('questSummary').textContent=`Target: ${fmt(r.target)} lb · Protein: ${r.protein}g/day. Sober, strong, present.`;
+  $('history').innerHTML=v.filter(l=>!l.partial).slice(-10).reverse().map(l=>`<div class="historyItem"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${l.date}</b><p>${l.weight||'—'} lb · ${l.protein||0}g protein · ${l.water||0}/${WATER_TARGET} chalices · ${l.miles||0} mi · mood ${l.mood||'—'}/10</p></div><div class="${l.sober==='yes'?'check':'x'}">${l.sober==='yes'?'CLEAR':'LOGGED'}</div></div></div>`).join('')||'<div class="historyItem"><b>No logs yet</b><p>Log today to start the run.</p></div>';
 }
 function updateDrinksField(){const show=$('sober').value==='no'; $('drinksField').classList.toggle('hidden', !show); if(!show) $('drinks').value=0;}
 $('sober').addEventListener('change', updateDrinksField);
-$('form').addEventListener('submit',e=>{e.preventDefault(); updateDrinksField(); let currentLogs=logs(); const previousToday=currentLogs.find(l=>l.date===today())||{}; const entry={date:today(),weight:$('weight').value||START,sober:$('sober').value,drinks:$('sober').value==='no' ? ($('drinks').value||0) : 0,water:$('waterIn').value||previousToday.water||0,protein:$('proteinIn').value||0,miles:$('milesIn').value||0,workout:$('workout').value,mood:$('moodIn').value||'',partial:false}; let v=currentLogs.filter(l=>l.date!==entry.date); v.push(entry); saveLogs(v); render(); showToast('Log saved'); showTab('home')});
-function quickAddWater(){let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Water +1')};
+$('form').addEventListener('submit',e=>{e.preventDefault(); updateDrinksField(); const r=rules(); let currentLogs=logs(); const previousToday=currentLogs.find(l=>l.date===today())||{}; const entry={date:today(),weight:$('weight').value||r.start,sober:$('sober').value,drinks:$('sober').value==='no' ? ($('drinks').value||0) : 0,water:$('waterIn').value||previousToday.water||0,protein:$('proteinIn').value||0,miles:$('milesIn').value||0,workout:$('workout').value,mood:$('moodIn').value||'',partial:false}; let v=currentLogs.filter(l=>l.date!==entry.date); v.push(entry); saveLogs(v); render(); showToast('Log saved'); showTab('home')});
+function loadRulesForm(){const r=rules(); $('startTargetIn').value=r.start; $('weightTargetIn').value=r.target; $('proteinTargetIn').value=r.protein;}
+$('rulesForm').addEventListener('submit',e=>{e.preventDefault(); const next={start:Number($('startTargetIn').value)||DEFAULT_RULES.start,target:Number($('weightTargetIn').value)||DEFAULT_RULES.target,protein:Number($('proteinTargetIn').value)||DEFAULT_RULES.protein}; saveRules(next); render(); loadRulesForm(); showToast('Rules saved'); showTab('home')});
+function resetRules(){saveRules(DEFAULT_RULES); loadRulesForm(); render(); showToast('Rules reset')}
+function quickAddWater(){let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Chalice +1')};
 let int=null, left=600; function startTimer(){clearInterval(int); left=600; $('timer').textContent='10:00'; int=setInterval(()=>{left--; const m=String(Math.floor(left/60)).padStart(2,'0'), s=String(left%60).padStart(2,'0'); $('timer').textContent=`${m}:${s}`; if(left<=0){clearInterval(int); showToast('Reset complete')}},1000)}
-setVerse(); updateDrinksField(); render();
+setVerse(); updateDrinksField(); loadRulesForm(); render();
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
 </script>
 </body>
