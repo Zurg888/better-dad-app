@@ -1,4 +1,4 @@
-const CACHE = 'galahad-v7';
+const CACHE = 'galahad-v8';
 const ASSETS = [
   './manifest.webmanifest',
   './icon.svg',
