@@ -42,7 +42,7 @@
     .masthead{background:var(--black);border:4px solid var(--black);box-shadow:var(--shadow);padding:8px 10px 11px;margin-bottom:12px;transform:skew(-3deg)}
     .masthead h1{font-family:var(--font-head);font-size:47px;line-height:.88;margin:0;color:var(--orange);letter-spacing:.02em;text-shadow:3px 3px 0 #000,-1px -1px 0 var(--yellow);transform:skew(3deg);text-transform:uppercase}
     .masthead .sub{font-family:var(--font-mono);font-size:12px;color:var(--yellow);letter-spacing:1px;margin-top:5px;transform:skew(3deg);font-weight:900}
-    .topRow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.date{background:var(--cream);color:var(--ink);border:3px solid var(--black);box-shadow:4px 4px 0 #000;padding:8px 10px;font-family:var(--font-mono);font-size:12px;font-weight:900}.missionTag{background:var(--yellow);color:var(--ink);border:3px solid #000;box-shadow:4px 4px 0 #000;padding:8px 10px;font-family:var(--font-head);font-size:20px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+    .topRow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.date{background:var(--cream);color:var(--ink);border:3px solid var(--black);box-shadow:4px 4px 0 #000;padding:8px 10px;font-family:var(--font-mono);font-size:12px;font-weight:900}.missionTag{background:var(--yellow);color:var(--ink);border:3px solid #000;box-shadow:4px 4px 0 #000;padding:8px 10px;font-family:var(--font-head);font-size:20px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}.soundDock{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin:-2px 0 12px;background:#120d09;border:3px solid #000;box-shadow:4px 4px 0 #000;padding:8px}.soundDock span{font-family:var(--font-mono);font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase}.soundBtn{min-height:38px;background:#2a1b10;color:var(--yellow);border:3px solid #000;box-shadow:3px 3px 0 #000;font-family:var(--font-head);font-size:18px;text-transform:uppercase}.soundBtn.on{background:var(--yellow);color:var(--ink)}
     .tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:12px}.tab{min-height:46px;background:#22160d;color:var(--cream);border:3px solid var(--black);box-shadow:3px 3px 0 #000;font-family:var(--font-head);font-size:17px;text-transform:uppercase;letter-spacing:.02em}.tab.active{background:var(--yellow);color:var(--ink)}
     .section{display:none}.section.active{display:block;animation:pop .15s ease}@keyframes pop{from{opacity:.65;transform:translateY(3px)}to{opacity:1;transform:none}}
     .panel{background:var(--panel);border:4px solid #000;box-shadow:var(--shadow);padding:12px;margin-bottom:12px;position:relative}.panel:before{content:"";position:absolute;inset:4px;border:1px solid rgba(255,210,63,.18);pointer-events:none}.panel.orange{background:linear-gradient(180deg,#ff9d19,#df5d12);color:var(--ink)}.panel.cream{background:var(--cream);color:var(--ink)}
@@ -62,6 +62,7 @@
   <div class="app">
     <header class="masthead"><h1>Galahad</h1><div class="sub">STRENGTH OF TEN // PURE OF HEART</div></header>
     <div class="topRow"><div class="date" id="todayDate">Today</div><div class="missionTag">Level 01</div></div>
+    <div class="soundDock"><span>Original shire-style loop starts after first tap</span><button class="soundBtn" id="musicBtn" onclick="toggleShireMusic()">Music Off</button></div>
     <nav class="tabs" aria-label="Sections">
       <button class="tab active" data-tab="home" onclick="showTab('home')">Today</button>
       <button class="tab" data-tab="checkin" onclick="showTab('checkin')">Log</button>
@@ -96,7 +97,7 @@
 
         <div class="metrics">
           <div class="metric good"><div class="name">Sober Streak</div><div class="num"><span id="streak">0</span>D</div></div>
-          <div class="metric"><div class="name">Miles Week</div><div class="num"><span id="miles">0</span></div></div>
+          <div class="metric"><div class="name">Knight Travel</div><div class="num"><span id="miles">0</span></div></div>
           <div class="metric good"><div class="name">Protein</div><div class="num"><span id="protein">0/185G</span></div></div>
           <div class="metric"><div class="name">Mood</div><div class="num"><span id="mood">—</span>/10</div></div>
         </div>
@@ -111,7 +112,7 @@
           <div class="field hidden" id="drinksField"><label>Drinks</label><input id="drinks" type="number" min="0" value="0"></div>
           <div class="field"><label>Water chalices</label><input id="waterIn" type="number" min="0" max="12" step="1" placeholder="6"></div>
           <div class="field"><label>Protein grams</label><input id="proteinIn" type="number" min="0" placeholder="180"></div>
-          <div class="field"><label>Miles run/walked</label><input id="milesIn" type="number" min="0" step="0.1" placeholder="1"></div>
+          <div class="field"><label>Travel miles</label><input id="milesIn" type="number" min="0" step="0.1" placeholder="1"></div>
           <div class="field"><label>Workout</label><select id="workout"><option>Rest / walk</option><option>Lift A</option><option>Lift B</option><option>Run</option></select></div>
           <div class="field"><label>Mood 1-10</label><input id="moodIn" type="number" min="1" max="10" placeholder="5"></div>
           <button class="primary" type="submit">Save Log</button>
@@ -200,6 +201,47 @@ function addDays(key,n){const [y,m,d]=key.split('-').map(Number); const dt=new D
 function daysBetween(a,b){const [ay,am,ad]=a.split('-').map(Number), [by,bm,bd]=b.split('-').map(Number); return Math.round((new Date(by,bm-1,bd)-new Date(ay,am-1,ad))/86400000)}
 function showToast(t='Saved.'){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
 function showTab(id){document.querySelectorAll('.section,.tab').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll(`[data-tab="${id}"]`).forEach(x=>x.classList.add('active'));window.scrollTo({top:0,behavior:'smooth'});}
+let audioCtx=null, musicTimer=null, musicOn=false;
+function ensureAudio(){
+  const Ctx=window.AudioContext||window.webkitAudioContext;
+  if(!Ctx) return null;
+  if(!audioCtx) audioCtx=new Ctx();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
+}
+function tone(freq, when, dur, type='triangle', vol=.05){
+  const ctx=ensureAudio(); if(!ctx) return;
+  const osc=ctx.createOscillator(), gain=ctx.createGain();
+  osc.type=type; osc.frequency.setValueAtTime(freq, when);
+  gain.gain.setValueAtTime(0.0001, when);
+  gain.gain.exponentialRampToValueAtTime(vol, when+.03);
+  gain.gain.exponentialRampToValueAtTime(0.0001, when+dur);
+  osc.connect(gain).connect(ctx.destination); osc.start(when); osc.stop(when+dur+.05);
+}
+function playWaterSound(){
+  const ctx=ensureAudio(); if(!ctx) return;
+  const now=ctx.currentTime;
+  tone(720, now, .18, 'sine', .07); tone(430, now+.08, .22, 'sine', .05);
+  const buffer=ctx.createBuffer(1, ctx.sampleRate*.28, ctx.sampleRate), data=buffer.getChannelData(0);
+  for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
+  const src=ctx.createBufferSource(), filter=ctx.createBiquadFilter(), gain=ctx.createGain();
+  src.buffer=buffer; filter.type='bandpass'; filter.frequency.value=950; filter.Q.value=1.1;
+  gain.gain.setValueAtTime(.09, now); gain.gain.exponentialRampToValueAtTime(.0001, now+.28);
+  src.connect(filter).connect(gain).connect(ctx.destination); src.start(now);
+}
+function scheduleShireLoop(){
+  const ctx=ensureAudio(); if(!ctx || !musicOn) return;
+  const start=ctx.currentTime+.08;
+  // Original gentle pastoral loop — shire-inspired, not LOTR audio.
+  const notes=[392,440,494,587,523,494,440,392,330,392,440,494,440,392,330,294];
+  notes.forEach((f,i)=>tone(f,start+i*.55,.48,'triangle',.028));
+  [196,247,220,196].forEach((f,i)=>tone(f,start+i*2.2,2.1,'sine',.018));
+}
+function startShireMusic(){musicOn=true; $('musicBtn').textContent='Music On'; $('musicBtn').classList.add('on'); scheduleShireLoop(); clearInterval(musicTimer); musicTimer=setInterval(scheduleShireLoop, 8800);}
+function stopShireMusic(){musicOn=false; $('musicBtn').textContent='Music Off'; $('musicBtn').classList.remove('on'); clearInterval(musicTimer); musicTimer=null;}
+function toggleShireMusic(){musicOn?stopShireMusic():startShireMusic();}
+function armFirstTapMusic(e){if(e.target && e.target.id==='musicBtn') return; document.removeEventListener('pointerdown', armFirstTapMusic); startShireMusic();}
+document.addEventListener('pointerdown', armFirstTapMusic);
 function soberStreak(v){let s=0; const byDate=Object.fromEntries(v.map(l=>[l.date,l])); let cursor=today(); while(byDate[cursor] && byDate[cursor].sober==='yes' && Number(byDate[cursor].drinks||0)===0){s++; cursor=addDays(cursor,-1)} return s;}
 function checkinInfo(v){const t=today(); const fullLogs=v.filter(l=>!l.partial); const sorted=[...fullLogs].sort((a,b)=>b.date.localeCompare(a.date)); const latest=sorted[0]; const todayLog=fullLogs.find(l=>l.date===t); if(todayLog) return {logged:true, label:'Logged Today', detail: todayLog.sober==='yes' && Number(todayLog.drinks||0)===0 ? 'Quest complete: clean day' : 'Honest log saved'}; if(!latest) return {logged:false, label:'Not Logged', detail:'No check-in today'}; const gap=daysBetween(latest.date,t); return {logged:false, label:'Missed Log', detail: gap===1 ? 'Last log was yesterday' : `Last log ${gap} days ago`};}
 function setVerse(){const d=new Date(); const start=new Date(d.getFullYear(),0,0); const day=Math.floor((d-start)/86400000); const v=verses[day%verses.length]; $('verseText').textContent=v.t; $('verseRef').textContent=v.r; $('reflection').textContent=v.f; $('todayDate').textContent=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}).toUpperCase();}
@@ -237,10 +279,10 @@ function render(){
   $('mood').textContent=info.logged ? (latest.mood||'—') : '—';
   const weekAgo=Date.now()-6*864e5;
   const miles=v.filter(l=>new Date(l.date+'T00:00:00').getTime()>=weekAgo).reduce((a,l)=>a+Number(l.miles||0),0);
-  $('miles').textContent=miles.toFixed(1).replace('.0','');
+  $('miles').textContent=miles.toFixed(1).replace('.0','')+' MI';
   $('questSummary').textContent=`Target: ${fmt(r.target)} lb · Protein: ${r.protein}g/day. Current rank: ${KNIGHT_RANKS[level-1].name}.`;
   renderRankBoard(st,level);
-  $('history').innerHTML=v.filter(l=>!l.partial).slice(-10).reverse().map(l=>`<div class="historyItem"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${l.date}</b><p>${l.weight||'—'} lb · ${l.protein||0}g protein · ${l.water||0}/${WATER_TARGET} chalices · ${l.miles||0} mi · mood ${l.mood||'—'}/10</p></div><div class="${l.sober==='yes'?'check':'x'}">${l.sober==='yes'?'CLEAR':'LOGGED'}</div></div></div>`).join('')||'<div class="historyItem"><b>No logs yet</b><p>Log today to start the run.</p></div>';
+  $('history').innerHTML=v.filter(l=>!l.partial).slice(-10).reverse().map(l=>`<div class="historyItem"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${l.date}</b><p>${l.weight||'—'} lb · ${l.protein||0}g protein · ${l.water||0}/${WATER_TARGET} chalices · ${l.miles||0} road mi · mood ${l.mood||'—'}/10</p></div><div class="${l.sober==='yes'?'check':'x'}">${l.sober==='yes'?'CLEAR':'LOGGED'}</div></div></div>`).join('')||'<div class="historyItem"><b>No logs yet</b><p>Log today to start the run.</p></div>';
 }
 function updateDrinksField(){const show=$('sober').value==='no'; $('drinksField').classList.toggle('hidden', !show); if(!show) $('drinks').value=0;}
 $('sober').addEventListener('change', updateDrinksField);
@@ -248,7 +290,7 @@ $('form').addEventListener('submit',e=>{e.preventDefault(); updateDrinksField();
 function loadRulesForm(){const r=rules(); $('startTargetIn').value=r.start; $('weightTargetIn').value=r.target; $('proteinTargetIn').value=r.protein;}
 $('rulesForm').addEventListener('submit',e=>{e.preventDefault(); const next={start:Number($('startTargetIn').value)||DEFAULT_RULES.start,target:Number($('weightTargetIn').value)||DEFAULT_RULES.target,protein:Number($('proteinTargetIn').value)||DEFAULT_RULES.protein}; saveRules(next); render(); loadRulesForm(); showToast('Rules saved'); showTab('home')});
 function resetRules(){saveRules(DEFAULT_RULES); loadRulesForm(); render(); showToast('Rules reset')}
-function quickAddWater(){let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Chalice +1')};
+function quickAddWater(){playWaterSound(); let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Chalice +1')};
 let int=null, left=600; function startTimer(){clearInterval(int); left=600; $('timer').textContent='10:00'; int=setInterval(()=>{left--; const m=String(Math.floor(left/60)).padStart(2,'0'), s=String(left%60).padStart(2,'0'); $('timer').textContent=`${m}:${s}`; if(left<=0){clearInterval(int); showToast('Reset complete')}},1000)}
 migrateStorage(); setVerse(); updateDrinksField(); loadRulesForm(); render();
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./service-worker.js').then(r=>r.update()).catch(()=>{});
