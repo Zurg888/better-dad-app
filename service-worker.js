@@ -1,4 +1,4 @@
-const CACHE = 'better-dad-v5';
+const CACHE = 'better-dad-v6';
 const ASSETS = [
   './index.html',
   './manifest.webmanifest',
