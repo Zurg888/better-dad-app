@@ -78,7 +78,6 @@
           <p class="verse" id="verseText">“The Lord is my strength and my shield; in him my heart trusts.”</p>
           <p class="ref" id="verseRef">Psalm 28:7</p>
           <p class="focus" id="reflection">Today’s focus: choose presence over escape.</p>
-          <button class="secondary" style="margin-top:10px" onclick="readDailyVerse()" type="button">Read Verse Aloud</button>
         </article>
 
         <div class="statusStrip" id="checkinStrip"><b id="checkinStatus">Not Logged</b><span id="lastCheckin">No check-in today</span></div>
@@ -182,7 +181,7 @@ const verses=[
   {t:'“Let us not grow weary of doing good, for in due season we will reap.”', r:'Galatians 6:9', f:'Objective: consistency compounds.'}
 ];
 const $=id=>document.getElementById(id);
-const WATER_SFX_BOOST=2, MUSIC_VOLUME=.15;
+const MUSIC_VOLUME=.03;
 const KNIGHT_RANKS=[
   {name:'Page', days:0, desc:'Begin the quest. Show up, learn the rules, log honestly.'},
   {name:'Squire', days:3, desc:'Three clean days. Build rhythm and serve the mission.'},
@@ -226,12 +225,14 @@ function tone(freq, when, dur, type='triangle', vol=.05){
 function playWaterSound(){
   const ctx=ensureAudio(); if(!ctx) return;
   const now=ctx.currentTime;
-  tone(720, now, .18, 'sine', .07*WATER_SFX_BOOST); tone(430, now+.08, .22, 'sine', .05*WATER_SFX_BOOST);
-  const buffer=ctx.createBuffer(1, ctx.sampleRate*.28, ctx.sampleRate), data=buffer.getChannelData(0);
+  tone(880, now, .24, 'sine', .32);
+  tone(520, now+.06, .28, 'triangle', .24);
+  tone(1240, now+.16, .18, 'sine', .18);
+  const buffer=ctx.createBuffer(1, ctx.sampleRate*.42, ctx.sampleRate), data=buffer.getChannelData(0);
   for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
   const src=ctx.createBufferSource(), filter=ctx.createBiquadFilter(), gain=ctx.createGain();
-  src.buffer=buffer; filter.type='bandpass'; filter.frequency.value=950; filter.Q.value=1.1;
-  gain.gain.setValueAtTime(.09*WATER_SFX_BOOST, now); gain.gain.exponentialRampToValueAtTime(.0001, now+.28);
+  src.buffer=buffer; filter.type='bandpass'; filter.frequency.value=1200; filter.Q.value=1.4;
+  gain.gain.setValueAtTime(.55, now); gain.gain.exponentialRampToValueAtTime(.0001, now+.42);
   src.connect(filter).connect(gain).connect(ctx.destination); src.start(now);
 }
 function playLevelUpSound(){
@@ -240,28 +241,17 @@ function playLevelUpSound(){
   [196,247,294,392,494,587,784].forEach((f,i)=>tone(f, now+i*.075, .22, i%2?'triangle':'square', .09));
   tone(988, now+.58, .55, 'sawtooth', .055);
 }
-function readDailyVerse(){
-  if(!('speechSynthesis' in window)){showToast('Voice not supported'); return;}
-  const text=`${$('verseText').textContent.replace(/[“”]/g,'')} ${$('verseRef').textContent}. ${$('reflection').textContent}`;
-  speechSynthesis.cancel();
-  const utterance=new SpeechSynthesisUtterance(text);
-  const voices=speechSynthesis.getVoices();
-  utterance.voice=voices.find(v=>/daniel|arthur|fred|george|thomas|english|male/i.test(v.name))||voices.find(v=>/en-/i.test(v.lang))||null;
-  utterance.rate=.82;
-  utterance.pitch=.55;
-  utterance.volume=1;
-  speechSynthesis.speak(utterance);
-}
 function setMusicButton(on){$('musicBtn').textContent=on?'♪ On':'♪ Off'; $('musicBtn').classList.toggle('on', on);}
+function setMusicVolume(){const audio=$('bgMusic'); if(audio) audio.volume=MUSIC_VOLUME;}
 function startShireMusic(){
   const audio=$('bgMusic'); if(!audio) return;
-  audio.volume=MUSIC_VOLUME;
+  setMusicVolume();
   const play=audio.play();
   if(play && play.then) play.then(()=>{musicOn=true; setMusicButton(true)}).catch(()=>{musicOn=false; setMusicButton(false)});
   else {musicOn=true; setMusicButton(true)}
 }
 function stopShireMusic(){const audio=$('bgMusic'); if(audio) audio.pause(); musicOn=false; setMusicButton(false);}
-function toggleShireMusic(){musicOn?stopShireMusic():startShireMusic();}
+function toggleShireMusic(){setMusicVolume(); musicOn?stopShireMusic():startShireMusic();}
 function armFirstTapMusic(e){if(e.target && e.target.id==='musicBtn') return; document.removeEventListener('pointerdown', armFirstTapMusic); startShireMusic();}
 document.addEventListener('pointerdown', armFirstTapMusic);
 function fullLogs(v){return v.filter(l=>!l.partial)}
@@ -324,7 +314,7 @@ $('rulesForm').addEventListener('submit',e=>{e.preventDefault(); const mode=$('a
 function resetRules(){saveRules(DEFAULT_RULES); loadRulesForm(); render(); showToast('Rules reset')}
 function quickAddWater(){playWaterSound(); let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Chalice +1')};
 let int=null, left=600; function startTimer(){clearInterval(int); left=600; $('timer').textContent='10:00'; int=setInterval(()=>{left--; const m=String(Math.floor(left/60)).padStart(2,'0'), s=String(left%60).padStart(2,'0'); $('timer').textContent=`${m}:${s}`; if(left<=0){clearInterval(int); showToast('Reset complete')}},1000)}
-migrateStorage(); setVerse(); updateDrinksField(); loadRulesForm(); render();
+migrateStorage(); setVerse(); updateDrinksField(); loadRulesForm(); setMusicVolume(); render();
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./service-worker.js').then(r=>r.update()).catch(()=>{});
 </script>
 </body>
