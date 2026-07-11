@@ -102,6 +102,7 @@
           <div class="metric"><div class="name">Mood</div><div class="num"><span id="mood">—</span>/10</div></div>
         </div>
         <div class="actions"><button class="primary" onclick="showTab('checkin')">Log Today</button><button class="secondary" onclick="showTab('craving')">Help</button></div>
+        <button class="danger" onclick="resetDeviceData()" style="margin-top:12px">Reset This Device</button>
       </section>
 
       <section id="checkin" class="section">
@@ -312,6 +313,7 @@ function updateAlcoholFields(){const show=$('alcoholModeIn').value==='limit'; $(
 function loadRulesForm(){const r=rules(); $('startTargetIn').value=r.start; $('weightTargetIn').value=r.target; $('proteinTargetIn').value=r.protein; $('alcoholModeIn').value=r.alcoholMode||'zero'; $('weeklyDrinkLimitIn').value=Number(r.weeklyDrinkLimit||0); updateAlcoholFields();}
 $('rulesForm').addEventListener('submit',e=>{e.preventDefault(); const mode=$('alcoholModeIn').value; const next={start:Number($('startTargetIn').value)||DEFAULT_RULES.start,target:Number($('weightTargetIn').value)||DEFAULT_RULES.target,protein:Number($('proteinTargetIn').value)||DEFAULT_RULES.protein,alcoholMode:mode,weeklyDrinkLimit:mode==='limit'?Math.max(0,Number($('weeklyDrinkLimitIn').value)||0):0}; saveRules(next); render(); loadRulesForm(); showToast('Rules saved'); showTab('home')});
 function resetRules(){saveRules(DEFAULT_RULES); loadRulesForm(); render(); showToast('Rules reset')}
+function resetDeviceData(){if(!confirm('Clear logs and King’s Rules on this device?')) return; localStorage.removeItem(KEY); localStorage.removeItem(RULES_KEY); loadRulesForm(); render(); showToast('Device reset')}
 function quickAddWater(){playWaterSound(); let v=logs(); const t=today(); let entry=v.find(l=>l.date===t); if(!entry){entry={date:t,water:0,partial:true}; v.push(entry)} entry.water=Math.min(12, Number(entry.water||0)+1); saveLogs(v); render(); showToast('Chalice +1')};
 migrateStorage(); setVerse(); updateDrinksField(); loadRulesForm(); setMusicVolume(); render();
 if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./service-worker.js').then(r=>r.update()).catch(()=>{});
